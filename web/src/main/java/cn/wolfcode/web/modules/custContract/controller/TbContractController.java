@@ -4,6 +4,8 @@ import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.LayuiTools;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
+import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
+import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
 import cn.wolfcode.web.modules.log.LogModules;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -25,6 +27,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 /**
  * @author wbb
  * @since 2023-06-02
@@ -38,6 +42,9 @@ public class TbContractController extends BaseController {
 
     private static final String LogModule = "TbContract";
 
+    @Autowired
+    private ITbCustomerService customerService;
+
     @GetMapping("/list.html")
     public String list() {
         return "custContract/custContractInfo/list";
@@ -46,6 +53,8 @@ public class TbContractController extends BaseController {
     @RequestMapping("/add.html")
     @PreAuthorize("hasAuthority('custContract:custContractInfo:add')")
     public ModelAndView toAdd(ModelAndView mv) {
+        List<TbCustomer> customerList = customerService.list();
+        mv.addObject("customerList",customerList);
         mv.setViewName("custContract/custContractInfo/add");
         return mv;
     }

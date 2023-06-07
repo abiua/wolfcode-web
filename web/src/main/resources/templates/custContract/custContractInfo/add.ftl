@@ -26,9 +26,14 @@
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">客户id</label>
+                        <label class="layui-form-label">合同客户</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="custId"  placeholder="请输入"  autocomplete="off" class="layui-input">
+<#--                        <input type="text"  name="custId"  placeholder="请输入"  autocomplete="off" class="layui-input">-->
+                        <select name="custId">
+                            <#list customerList as list>
+                                <option value="${list.id}">${list.customerName}</option>
+                            </#list>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-col-lg6">
@@ -52,13 +57,13 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">合同生效开始时间</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="startDate"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text" id="startDate" name="startDate"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">合同生效结束时间</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="endDate"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text" id="endDate" name="endDate"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
@@ -74,10 +79,13 @@
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">审核状态 0 未审核 1 审核通过 -1 审核不通过</label>
-                    <div class="layui-input-block">
-                        <input type="text"  name="auditStatus"  placeholder="请输入"  autocomplete="off" class="layui-input">
-                    </div>
+                        <label class="layui-form-label">审核状态</label>
+                    <select name="auditStatus">
+                        <option value="">请输入</option>
+                        <option value="0">未审核</option>
+                        <option value="1">审核通过</option>
+                        <option value="2">审核不通过</option>
+                    </select>
                 </div>
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">是否作废 1 作废 0 在用</label>
