@@ -21,7 +21,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         cols: [[
             {type: "checkbox", fixed: "left", width: 50},
                     {field: 'id', title:  'id', minWidth: 100, align: "center"},
-                    {field: 'custId', title: '客户id', minWidth: 100, align: "center"},
+                    {field: 'custIdName', title: '合同客户', minWidth: 100, align: "center"},
                     {field: 'contractName', title: '合同名称', minWidth: 100, align: "center"},
                     {field: 'contractCode', title: '合同编码', minWidth: 100, align: "center"},
                     {field: 'amounts', title: '合同金额', minWidth: 100, align: "center"},
@@ -63,10 +63,18 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         reload: function () {
             //获取搜索条件值
             var parameterName = $("#searchForm").find("input[name='parameterName']").val().trim();
+            var nullifyStatus = $("#searchForm").find("select[name='nullifyStatus']").val().trim();
+            var affixSealStatus = $("#searchForm").find("select[name='affixSealStatus']").val().trim();
+            var auditStatus = $("#searchForm").find("select[name='auditStatus']").val().trim();
+
             //表格重载
             tableIns.reload({
                 where: { //设定异步数据接口的额外参数，任意设
-                    parameterName: parameterName
+                    parameterName: parameterName,
+                    nullifyStatus,
+                    affixSealStatus,
+                    parameterName: parameterName,
+                    auditStatus: auditStatus
                 }
             });
         }
