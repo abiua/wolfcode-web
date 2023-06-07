@@ -3,16 +3,16 @@ datasource:
     validation-query: select 1
     driver: com.mysql.jdbc.Driver
     database: nojoke
-    ip: localhost
+    ip: 43.138.179.64
     port: 3306
     username: root
-    password: 123456
-    url: jdbc:mysql://${datasource.mysql.ip}:${datasource.mysql.port}/${datasource.mysql.database}?useSSL=false&serverTimezone=GMT%2B8&characterEncoding=utf8
+    password: Er1351358292810.
+    url: jdbc:mysql://${datasource.mysql.ip}:${datasource.mysql.port}/${datasource.mysql.database}?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&autoReconnect=true
   redis:
-    database: 0
-    ip: localhost
+    database: 1
+    ip: 43.138.179.64
     port: 6379
-    password:
+    password: Er1351358292810.
   druid:
     login-username: admin
     login-password: 123456
