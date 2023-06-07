@@ -21,6 +21,7 @@ import link.ahsj.core.annotations.SameUrlData;
 import link.ahsj.core.annotations.SysLog;
 import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -79,7 +80,13 @@ public class TbContractController extends BaseController {
     public ResponseEntity page(LayuiPage layuiPage) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
-        return ResponseEntity.ok(LayuiTools.toLayuiTableModel(entityService.page(page)));
+
+//        page = entityService.lambdaQuery()
+//                .like(StringUtils.isNotEmpty(parameterName), TbContract::getContractName, parameterName)
+//                .page(page);
+//        List<TbCustomer> records = page.getRecords();
+
+        return ResponseEntity.ok(LayuiTools.toLayuiTableModel(page));
     }
 
     @SameUrlData
