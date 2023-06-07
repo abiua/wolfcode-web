@@ -1,25 +1,25 @@
 
 -- 菜单
 INSERT INTO SYS_MENU_INFO ( MENU_ID, MENU_NAME, PARENT_MENU_CODE, MENU_TYPE, SORT, MENU_CODE, MENU_URL, DISABLE )
-VALUES ( '1664426666144837633', '客户合同管理', '1111', 2, 1, 'TbContractMng', 'custContractInfo/list.html', 0 );
+VALUES ( '1666417562839175170', '订货单管理', '1111', 2, 1, 'TbOrderInfoMng', 'orderInfo/list.html', 0 );
 
 -- 按钮
 -- 列表
 INSERT INTO SYS_MENU_INFO ( MENU_ID, MENU_NAME, PARENT_MENU_CODE, MENU_TYPE, SORT, MENU_CODE, AUTHORIZATION, DISABLE )
-VALUES ( '1664426666144837634','列表', 'TbContractMng', 4, 1, 'TbContractList', 'custContract:custContractInfo:list', 0 );
+VALUES ( '1666417562839175171','列表', 'TbOrderInfoMng', 4, 1, 'TbOrderInfoList', 'order:orderInfo:list', 0 );
 -- 新增
 INSERT INTO SYS_MENU_INFO ( MENU_ID, MENU_NAME, PARENT_MENU_CODE, MENU_TYPE, SORT, MENU_CODE, AUTHORIZATION, DISABLE )
-VALUES ( '1664426666144837635', '新增', 'TbContractMng', 4, 1, 'TbContractAdd', 'custContract:custContractInfo:add', 0 );
+VALUES ( '1666417562839175172', '新增', 'TbOrderInfoMng', 4, 1, 'TbOrderInfoAdd', 'order:orderInfo:add', 0 );
 
 -- 修改
 INSERT INTO SYS_MENU_INFO ( MENU_ID, MENU_NAME, PARENT_MENU_CODE, MENU_TYPE, SORT, MENU_CODE, AUTHORIZATION, DISABLE )
-VALUES ('1664426666144837636','修改', 'TbContractMng', 4, 1, 'TbContractUpdate', 'custContract:custContractInfo:update', 0);
+VALUES ('1666417562839175173','修改', 'TbOrderInfoMng', 4, 1, 'TbOrderInfoUpdate', 'order:orderInfo:update', 0);
 
 -- 删除
 INSERT INTO SYS_MENU_INFO ( MENU_ID, MENU_NAME, PARENT_MENU_CODE, MENU_TYPE, SORT, MENU_CODE, AUTHORIZATION, DISABLE )
-VALUES ('1664426666144837637','删除', 'TbContractMng', 4, 1, 'TbContractDelete', 'custContract:custContractInfo:delete', 0);
+VALUES ('1666417562839175174','删除', 'TbOrderInfoMng', 4, 1, 'TbOrderInfoDelete', 'order:orderInfo:delete', 0);
 
 -- 删除上面几条语句的方法
 DELETE SYS_MENU_INFO WHERE MENU_ID IN(
-'1664426666144837633','1664426666144837634','1664426666144837635','1664426666144837636','1664426666144837637'
+'1666417562839175170','1666417562839175171','1666417562839175172','1666417562839175173','1666417562839175174'
 )

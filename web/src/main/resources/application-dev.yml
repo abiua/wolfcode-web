@@ -7,7 +7,7 @@ datasource:
     port: 3306
     username: root
     password: Er1351358292810.
-    url: jdbc:mysql://${datasource.mysql.ip}:${datasource.mysql.port}/${datasource.mysql.database}?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&autoReconnect=true
+    url: jdbc:mysql://${datasource.mysql.ip}:${datasource.mysql.port}/${datasource.mysql.database}?useSSL=false&serverTimezone=GMT%2B8&characterEncoding=utf8&autoReconnect=true
   redis:
     database: 1
     ip: 43.138.179.64
