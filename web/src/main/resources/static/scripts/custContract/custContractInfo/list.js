@@ -21,7 +21,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         cols: [[
             {type: "checkbox", fixed: "left", width: 50},
                     {field: 'id', title:  'id', minWidth: 100, align: "center"},
-                    {field: 'custId', title: '客户id', minWidth: 100, align: "center"},
+                    {field: 'custIdName', title: '合同客户', minWidth: 100, align: "center"},
                     {field: 'contractName', title: '合同名称', minWidth: 100, align: "center"},
                     {field: 'contractCode', title: '合同编码', minWidth: 100, align: "center"},
                     {field: 'amounts', title: '合同金额', minWidth: 100, align: "center"},

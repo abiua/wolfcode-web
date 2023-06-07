@@ -81,8 +81,6 @@ public class TbContractController extends BaseController {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
 
-
-
         page = entityService.lambdaQuery()
                 .like(StringUtils.isNotEmpty(parameterName), TbContract::getContractName, parameterName)
                 .or()
@@ -91,7 +89,12 @@ public class TbContractController extends BaseController {
                 .eq(!StringUtils.isEmpty(affixSealStatus),TbContract::getAffixSealStatus,affixSealStatus)
                 .eq(!StringUtils.isEmpty(nullifyStatus),TbContract::getNullifyStatus,nullifyStatus)
                 .page(page);
-        ;
+
+        List<TbContract> records = page.getRecords();
+        for (TbContract record : records) {
+            TbCustomer customer = customerService.getById(record.getCustId());
+            record.setCustIdName(customer.getCustomerName());
+        }
 
         return ResponseEntity.ok(LayuiTools.toLayuiTableModel(page));
     }

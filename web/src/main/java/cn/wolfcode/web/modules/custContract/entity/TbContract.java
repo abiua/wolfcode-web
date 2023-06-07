@@ -1,5 +1,7 @@
 package cn.wolfcode.web.modules.custContract.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.io.Serializable;
@@ -19,9 +21,19 @@ public class TbContract implements Serializable {
     private String id;
 
     /**
-     * 客户id
+     * 合同客户
      */
     private String custId;
+
+    @TableField(exist = false)
+    private String custIdName;
+
+    public static long getSerialVersionUID(){
+        return serialVersionUID;
+    }
+    public String getCustIdName() {return custIdName;}
+    public void setCustIdName(String custIdName) {this.custIdName = custIdName;}
+
 
     /**
      * 合同名称
