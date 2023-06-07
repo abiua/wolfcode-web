@@ -109,6 +109,7 @@ public class TbContractController extends BaseController {
     @PreAuthorize("hasAuthority('custContract:custContractInfo:update')")
     public ResponseEntity<ApiModel> update(@Validated({UpdateGroup.class}) @RequestBody TbContract entity) {
 
+
         entity.setUpdateTime(LocalDateTime.now());//修改时间录入
         entityService.updateById(entity);
         return ResponseEntity.ok(ApiModel.ok());

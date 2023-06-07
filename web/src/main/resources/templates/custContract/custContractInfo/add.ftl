@@ -19,13 +19,7 @@
         <form class="layui-form" action="" lay-filter="component-form-element">
             <div class="layui-row layui-col-space10 layui-form-item">
 
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">id</label>
-                    <div class="layui-input-block">
-                        <input type="text"  name="id"  placeholder="请输入"  autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-col-lg6">
+               <div class="layui-col-lg6">
                         <label class="layui-form-label">合同客户</label>
                     <div class="layui-input-block">
 <#--                        <input type="text"  name="custId"  placeholder="请输入"  autocomplete="off" class="layui-input">-->
@@ -51,7 +45,7 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">合同金额</label>
                     <div class="layui-input-block">
-                        <input type="number"  name="amounts"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  name="amounts"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
