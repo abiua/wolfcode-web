@@ -1,4 +1,4 @@
-<#assign sec=JspTaglibs["http://http://www.gdyuhui.net/security/tags"]/>
+<#assign sec=JspTaglibs["http://http://www.ahsj.link/security/tags"]/>
 <!DOCTYPE html>
 <html>
 <head>
