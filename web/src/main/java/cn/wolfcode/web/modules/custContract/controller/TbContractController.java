@@ -77,16 +77,21 @@ public class TbContractController extends BaseController {
 
     @RequestMapping("list")
     @PreAuthorize("hasAuthority('custContract:custContractInfo:list')")
-    public ResponseEntity page(LayuiPage layuiPage, String parameterName, String auditStatus) {
+    public ResponseEntity page(LayuiPage layuiPage,String parameterName,String nullifyStatus,String affixSealStatus, String auditStatus) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
+
+
 
         page = entityService.lambdaQuery()
                 .like(StringUtils.isNotEmpty(parameterName), TbContract::getContractName, parameterName)
                 .or()
                 .like(StringUtils.isNotEmpty(parameterName), TbContract::getContractCode, parameterName)
                 .eq(StringUtils.isNotEmpty(auditStatus), TbContract::getAuditStatus, auditStatus)
+                .eq(!StringUtils.isEmpty(affixSealStatus),TbContract::getAffixSealStatus,affixSealStatus)
+                .eq(!StringUtils.isEmpty(nullifyStatus),TbContract::getNullifyStatus,nullifyStatus)
                 .page(page);
+        ;
 
         return ResponseEntity.ok(LayuiTools.toLayuiTableModel(page));
     }
