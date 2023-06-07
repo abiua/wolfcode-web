@@ -4,6 +4,7 @@ import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import link.ahsj.core.annotations.AddGroup;
 import link.ahsj.core.annotations.UpdateGroup;
+import lombok.Builder;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -50,11 +51,13 @@ public class TbCustomer implements Serializable {
     /**
      * 成立时间
      */
+    @Excel(name = "成立时间")
     private LocalDate registerDate;
 
     /**
      * 经营状态, 0 开业、1 注销、2 破产
      */
+    @Excel(name = "经营状态",replace = {"开业_0","注销_1","破产_2"})
     private Integer openStatus;
 
     /**
@@ -65,26 +68,35 @@ public class TbCustomer implements Serializable {
     /**
      * 注册资本,(万元)
      */
+    @Length(max = 20,message = "注册资本不能超过20字",groups = {AddGroup.class,UpdateGroup.class})
+    @Excel(name = "注册资本(万元)")
     private String regCapital;
 
     /**
      * 所属行业
      */
+    @Length(max = 30,message = "所属行业不能超过30字",groups = {AddGroup.class,UpdateGroup.class})
+    @Excel(name = "所属行业")
     private String industry;
 
     /**
      * 经营范围
      */
+    @Length(max = 500,message = "经营范围不能超过500字",groups = {AddGroup.class,UpdateGroup.class})
+    @Excel(name = "经营范围")
     private String scope;
 
     /**
      * 注册地址
      */
+    @Length(max = 500,message = "注册地址不能超过500字",groups = {AddGroup.class,UpdateGroup.class})
+    @Excel(name = "注册地址")
     private String regAddr;
 
     /**
      * 录入时间
      */
+    @Excel(name = "录入时间")
     private LocalDateTime inputTime;
 
     /**
@@ -93,6 +105,7 @@ public class TbCustomer implements Serializable {
     private LocalDateTime updateTime;
 
     @TableField(exist = false)
+    @Excel(name = "所属省份")
     private String provinceName;
     public static long getSerialVersionUID(){
         return serialVersionUID;
@@ -104,6 +117,7 @@ public class TbCustomer implements Serializable {
      */
     private String inputUserId;
     @TableField(exist = false)
+    @Excel(name = "录入人")
     private String inputUserName;
     public String getInputUserName() {
         return inputUserName;

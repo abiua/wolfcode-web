@@ -103,9 +103,6 @@ public class TbCustomerController extends BaseController {
     @PreAuthorize("hasAuthority('cust:custinfo:list')")
     public ResponseEntity page(LayuiPage layuiPage,String parameterName,String province,String openStatus) {
 
-        System.out.println(parameterName);
-        System.out.println(province);
-        System.out.println(openStatus);
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
 
@@ -202,6 +199,8 @@ public class TbCustomerController extends BaseController {
         return ResponseEntity.ok(ApiModel.ok());
     }
 
+    //导入功能
+
     @RequestMapping("import.html")
     public ModelAndView custImport(ModelAndView modelAndView){
         modelAndView.setViewName("cust/custinfo/importCust");
@@ -240,8 +239,51 @@ public class TbCustomerController extends BaseController {
         boolean b = entityService.saveBatch(importResult.getList());
 
         return b ? ResponseEntity.ok(ApiModel.ok()): ResponseEntity.ok(ApiModel.error());
-
-
     }
 
+
+    //导出功能
+    @RequestMapping("export")
+    public void export(HttpServletResponse response,String parameterName,String province,String openStatus){
+        System.out.println("parameterName:"+parameterName);
+        System.out.println("province:"+province);
+        System.out.println("openStatus:"+openStatus);
+        //1.导出内容
+        List<TbCustomer> customers = entityService.lambdaQuery()
+                .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
+                .or()
+                .like(StringUtils.isNotEmpty(province), TbCustomer::getProvince, province)
+                .or()
+                .like(StringUtils.isNotEmpty(openStatus), TbCustomer::getOpenStatus, openStatus)
+                .list();
+
+        for (TbCustomer customer : customers) {
+            customer.setProvinceName(CityUtils.getCityValue(customer.getProvince()));
+            customer.setInputUserName(sysUserService.getById(customer.getInputUserId()).getUsername());
+        }
+        //2.样式
+        ExportParams params = new ExportParams();
+
+        //3.组装对象
+        /**
+         * 参数一 样式
+         * 参数二 实体类
+         * 参数三 导出内容
+         *
+         * error数组越界：未在实体类中设置导出字段
+         */
+        Workbook excel = ExcelExportUtil.exportExcel(params, TbCustomer.class, customers);
+
+        //4.导出
+        try {
+            /**
+             * 参数一 HttpServletResponse
+             * 参数二 导出表名
+             * 参数三 workbook对象
+             */
+            PoiExportHelper.exportExcel(response,"企业客户信息",excel);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 }
