@@ -5,7 +5,10 @@ layui.use(['form', 'layer', 'laydate'], function () {
         $ = layui.jquery;
 
     laydate.render({
-        elem: '#visitDate'
+        elem: '#visitDate',
+        max: function (){
+            return new Date();
+        }.toString()
     });
 
     form.on('submit(Add-filter)', function (data) {

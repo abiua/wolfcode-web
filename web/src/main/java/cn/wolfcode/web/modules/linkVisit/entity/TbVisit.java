@@ -1,8 +1,11 @@
 package cn.wolfcode.web.modules.linkVisit.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import link.ahsj.core.annotations.AddGroup;
 import link.ahsj.core.annotations.UpdateGroup;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
@@ -36,6 +39,7 @@ public class TbVisit implements Serializable {
     private String custId;
 
     @TableField(exist = false)
+    @Excel(name = "所属企业")
     private String custName;
     public String getCustName(){return custName;}
     public void setCustName(String value){custName=value;}
@@ -47,29 +51,36 @@ public class TbVisit implements Serializable {
     private String linkmanId;
 
     @TableField(exist = false)
+    @Excel(name = "联系人")
     private String linkman;
     public String getLinkman(){return linkman;}
     public void setLinkman(String value){linkman=value;}
     /**
      * 拜访方式, 1 上门走访, 2 电话拜访
      */
+    @Excel(name = "拜访方式",replace = {"上门走访_1","电话拜访_2"})
     private Integer visitType;
 
     /**
      * 拜访原因
      */
     @NotBlank(message = "拜访原因不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 100,message = "拜访原因不能超过100字", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "拜访原因")
     private String visitReason;
 
     /**
      * 交流内容
      */
-    @NotBlank(message = "交流情况不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @NotBlank(message = "交流内容不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Length(max = 1000,message = "交流内容不能超过1000字", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "交流内容")
     private String content;
 
     /**
      * 拜访时间
      */
+    @Excel(name = "拜访时间")
     private LocalDate visitDate;
 
 
@@ -79,6 +90,7 @@ public class TbVisit implements Serializable {
     private String inputUser;
 
     @TableField(exist = false)
+    @Excel(name = "录入人")
     private String inputUserName;
     public String getInputUserName() {
         return inputUserName;
@@ -90,6 +102,7 @@ public class TbVisit implements Serializable {
     /**
      * 录入时间
      */
+    @Excel(name = "录入时间")
     private LocalDateTime inputTime;
 
     public String getId() {
