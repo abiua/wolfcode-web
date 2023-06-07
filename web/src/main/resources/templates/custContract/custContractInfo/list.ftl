@@ -34,6 +34,18 @@
                             </div>
 
                             <div class="layui-inline">
+                                <label class="layui-form-label">审核方式</label>
+                                <div class="layui-input-block input-box">
+                                    <select name="auditStatus">
+                                        <option value="">请选择</option>
+                                        <option value="0">未审核</option>
+                                        <option value="1">审核通过</option>
+                                        <option value="-1">审核不通过</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
                                 <button type="button" class="layui-btn layui-btn-normal" id="SearchBtn"
                                         data-type="reload">搜索
                                 </button>

@@ -122,9 +122,9 @@ public class TbCustomerController extends BaseController {
                 .eq(StringUtils.isNotEmpty(openStatus),TbCustomer::getOpenStatus,openStatus)
                 .like(StringUtils.isNotEmpty(parameterName),TbCustomer::getCustomerName, parameterName)
                 .page(page);
+
+
         List<TbCustomer> records = page.getRecords();
-
-
 
         for (TbCustomer record : records) {
             String cityValue = CityUtils.getCityValue(record.getProvince());
