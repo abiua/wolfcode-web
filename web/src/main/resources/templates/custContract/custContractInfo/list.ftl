@@ -37,6 +37,7 @@
                               <label class="layui-form-label">是否盖章确认</label>
                               <div class="layui-input-block input-box">
                                    <select name="affixSealStatus">
+                                        <option value="">请选择</option>
                                         <option value="1">是</option>
                                         <option value="0">否</option>
                                    </select>

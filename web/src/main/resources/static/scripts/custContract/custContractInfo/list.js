@@ -72,7 +72,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                 where: { //设定异步数据接口的额外参数，任意设
                     parameterName: parameterName,
                     nullifyStatus,
-                    affixSealStatus
+                    affixSealStatus,
                     parameterName: parameterName,
                     auditStatus: auditStatus
                 }
