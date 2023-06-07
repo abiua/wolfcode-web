@@ -21,27 +21,19 @@
             <input type="hidden" id="id" name="id" value="${id}">
             <div class="layui-row layui-col-space10 layui-form-item">
 
-
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">id</label>
-                    <div class="layui-input-block">
-                        <input type="text"
-                               name="id"
-                               value="${obj.id}"
-                               autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
-
-
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">客户id</label>
+                        <label class="layui-form-label">合同客户</label>
                     <div class="layui-input-block">
                         <input type="text"
                                name="custId"
                                value="${obj.custId}"
                                autocomplete="off"
                                class="layui-input">
+                               <select name="custId">
+                                   <#list customerList as list>
+                                           <option value="${list.id}">${list.customerName}</option>
+                                   </#list>
+                               </select>
                     </div>
                 </div>
 
@@ -121,11 +113,11 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">是否盖章确认 0 否 1 是</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="affixSealStatus"
-                               value="${obj.affixSealStatus}"
-                               autocomplete="off"
-                               class="layui-input">
+
+                        <select name="affixSealStatus">
+                                <option value="1" <#if obj.affixSealStatus == 1>selected</#if>>是</option>
+                                <option value="0" <#if obj.affixSealStatus == 0>selected</#if>>否</option>
+                        </select>
                     </div>
                 </div>
 
@@ -133,11 +125,12 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">审核状态 0 未审核 1 审核通过 -1 审核不通过</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="auditStatus"
-                               value="${obj.auditStatus}"
-                               autocomplete="off"
-                               class="layui-input">
+                        <select name="auditStatus">
+                                <option value="">请输入</option>
+                                <option value="0" <#if obj.auditStatus == 0>selected</#if>>未审核</option>
+                                <option value="1" <#if obj.auditStatus == 1>selected</#if>>审核通过</option>
+                                <option value="-1"<#if obj.auditStatus == -1>selected</#if>>审核不通过</option>
+                        </select>
                     </div>
                 </div>
 
@@ -145,47 +138,11 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">是否作废 1 作废 0 在用</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="nullifyStatus"
-                               value="${obj.nullifyStatus}"
-                               autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
 
-
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">录入人</label>
-                    <div class="layui-input-block">
-                        <input type="text"
-                               name="inputUser"
-                               value="${obj.inputUser}"
-                               autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
-
-
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">录入时间</label>
-                    <div class="layui-input-block">
-                        <input type="text"
-                               name="inputTime"
-                               value="${obj.inputTime}"
-                               autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
-
-
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">修改时间</label>
-                    <div class="layui-input-block">
-                        <input type="text"
-                               name="updateTime"
-                               value="${obj.updateTime}"
-                               autocomplete="off"
-                               class="layui-input">
+                         <select name="nullifyStatus">
+                              <option value="0" <#if obj.nullifyStatus == 0>selected</#if>>在用</option>
+                              <option value="1" <#if obj.nullifyStatus == 1>selected</#if>>作废</option>
+                          </select>
                     </div>
                 </div>
 
