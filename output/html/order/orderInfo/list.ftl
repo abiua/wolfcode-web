@@ -1,4 +1,4 @@
-<#assign sec=JspTaglibs["http://http://www.ahsj.link/security/tags"]/>
+<#assign sec=JspTaglibs["http://http://www.gdyuhui.net/security/tags"]/>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,43 +18,18 @@
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md12">
             <div class="layui-card">
-                <@sec.authenticate grants="cust:custinfo:list">
+                <@sec.authenticate grants="order:orderInfo:list">
 
                     <!-- 搜索条件start -->
                     <form class="layui-form layui-card-header layuiadmin-card-header-auto"
                          id="searchForm">
                         <div class="layui-form-item">
                             <div class="layui-inline">
-                                <label class="layui-form-label">企业名称</label>
+                                <label class="layui-form-label">参数</label>
                                 <div class="layui-input-block input-box">
                                     <input type="text" name="parameterName" placeholder="请输入"
                                            autocomplete="off"
                                            class="layui-input">
-                                </div>
-                            </div>
-
-
-                            <div class="layui-inline">
-                                <label class="layui-form-label">所属省份</label>
-                                <div class="layui-input-block input-box">
-                                    <select name="province">
-                                        <option value="">请选择</option>
-                                        <#list citys as city>
-                                            <option value="${city.key}">${city.value}</option>
-                                        </#list>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div  class="layui-inline">
-                                <label class="layui-form-label">经营状态</label>
-                                <div class="layui-input-block input-box">
-                                    <select name="openStatus">
-                                        <option value="">请选择</option>
-                                        <option value="0">开业</option>
-                                        <option value="1">注销</option>
-                                        <option value="2">破产</option>
-                                    </select>
                                 </div>
                             </div>
 
@@ -76,28 +51,20 @@
 
                     <script type="text/html" id="List-toolbar">
                         <div class="layui-btn-container">
-                            <@sec.authenticate grants="cust:custinfo:add">
+                            <@sec.authenticate grants="order:orderInfo:add">
                                 <button class="layui-btn layui-btn-sm layui-btn-primary"
                                         lay-event="add"><i class="layui-icon">&#xe654;</i>新增
                                 </button>
                             </@sec.authenticate>
-
-                            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="import"><i
-                                        class="layui-icon">&#xe67c;</i>导入
-                            </button>
-
-                            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-tips="导出" lay-event="export">
-                                <i class="layui-icon layui-icon-export"></i>导出
-                            </button>
                         </div>
                     </script>
 
                     <script type="text/html" id="List-editBar">
-                        <@sec.authenticate grants="cust:custinfo:update">
+                        <@sec.authenticate grants="order:orderInfo:update">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="update"><i
                                         class="layui-icon">&#xe642;</i>修改</a>
                         </@sec.authenticate>
-                        <@sec.authenticate grants="cust:custinfo:delete">
+                        <@sec.authenticate grants="order:orderInfo:delete">
                             <a class="layui-btn layui-btn-xs layui-btn-primary" lay-event="delete"><i
                                         class="layui-icon">&#xe640;</i>删除</a>
                         </@sec.authenticate>
@@ -112,7 +79,6 @@
 <script src="${request.contextPath}/layuiadmin/layui/layui.js"></script>
 <script src="${request.contextPath}/layui-extend.js"></script>
 <script src="${request.contextPath}/webjars/jquery/jquery.min.js"></script>
-<script src="${request.contextPath}/fileDownload/jquery.fileDownload.min.js"></script>
-<script type="text/javascript" src="${request.contextPath}/scripts/cust/custinfo/list.js?_=${randomNum}"></script>
+<script type="text/javascript" src="${request.contextPath}/scripts/order/orderInfo/list.js?_=${randomNum}"></script>
 </body>
 </html>

@@ -149,9 +149,6 @@ public class TbCustLinkmanController extends BaseController {
      */
     @RequestMapping("export")
     public void export(HttpServletResponse response,String parameterName){
-
-
-
         //1.导出内容
         List<TbCustLinkman> linkmen = entityService.lambdaQuery()
                 .like(StringUtils.isNotEmpty(parameterName), TbCustLinkman::getLinkman, parameterName)
