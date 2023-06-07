@@ -63,10 +63,14 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         reload: function () {
             //获取搜索条件值
             var parameterName = $("#searchForm").find("input[name='parameterName']").val().trim();
+            var nullifyStatus = $("#searchForm").find("select[name='nullifyStatus']").val().trim();
+            var affixSealStatus = $("#searchForm").find("select[name='affixSealStatus']").val().trim();
             //表格重载
             tableIns.reload({
                 where: { //设定异步数据接口的额外参数，任意设
-                    parameterName: parameterName
+                    parameterName: parameterName,
+                    nullifyStatus,
+                    affixSealStatus
                 }
             });
         }
