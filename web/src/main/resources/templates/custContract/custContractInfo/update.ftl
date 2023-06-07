@@ -21,8 +21,6 @@
             <input type="hidden" id="id" name="id" value="${id}">
             <div class="layui-row layui-col-space10 layui-form-item">
 
-
-
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">合同客户</label>
                     <div class="layui-input-block">
@@ -31,7 +29,7 @@
 <#--                               value="${obj.custId}"-->
 <#--                               autocomplete="off"-->
 <#--                               class="layui-input">-->
-                        <select name="custId">
+                        <select name="custId" <#if obj.nullifyStatus == 1>disabled</#if>>
                             <#list customerList as list>
                                 <#if obj.custId==list.id>
                                     <option selected value="${list.id}">${list.customerName}</option>
@@ -51,7 +49,9 @@
                                name="contractName"
                                value="${obj.contractName}"
                                autocomplete="off"
+                               <#if obj.nullifyStatus == 1>disabled</#if>
                                class="layui-input">
+
                     </div>
                 </div>
 
@@ -63,7 +63,9 @@
                                name="contractCode"
                                value="${obj.contractCode}"
                                autocomplete="off"
+                               <#if obj.nullifyStatus == 1>disabled</#if>
                                class="layui-input">
+
                     </div>
                 </div>
 
@@ -75,7 +77,9 @@
                                name="amounts"
                                value="${obj.amounts}"
                                autocomplete="off"
+                                <#if obj.nullifyStatus == 1>disabled</#if>
                                class="layui-input">
+
                     </div>
                 </div>
 
@@ -90,7 +94,7 @@
 <#--                               class="layui-input">-->
 <#--                    </div>-->
                     <div class="layui-input-block">
-                        <input value="${obj.startDate}" type="text" id="startDate" name="startDate" placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input <#if obj.nullifyStatus == 1>disabled</#if> value="${obj.startDate}" type="text" id="startDate" name="startDate" placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
@@ -105,7 +109,7 @@
 <#--                               class="layui-input">-->
 <#--                    </div>-->
                     <div class="layui-input-block">
-                        <input value="${obj.endDate}" type="text" id="endDate" name="endDate" placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input <#if obj.nullifyStatus == 1>disabled</#if> value="${obj.endDate}" type="text" id="endDate" name="endDate" placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
@@ -117,7 +121,9 @@
                                name="content"
                                value="${obj.content}"
                                autocomplete="off"
+                               <#if obj.nullifyStatus == 1>disabled</#if>
                                class="layui-input">
+
                     </div>
                 </div>
 
@@ -126,7 +132,7 @@
                         <label class="layui-form-label">是否盖章确认 0 否 1 是</label>
                     <div class="layui-input-block">
 
-                        <select name="affixSealStatus">
+                        <select name="affixSealStatus" <#if obj.nullifyStatus == 1>disabled</#if>>
                                 <option value="1" <#if obj.affixSealStatus == 1>selected</#if>>是</option>
                                 <option value="0" <#if obj.affixSealStatus == 0>selected</#if>>否</option>
                         </select>
@@ -142,7 +148,7 @@
 <#--                               value="${obj.auditStatus}"-->
 <#--                               autocomplete="off"-->
 <#--                               class="layui-input">-->
-                        <select name="auditStatus">
+                        <select name="auditStatus" <#if obj.nullifyStatus == 1>disabled</#if>>
                             <option <#if obj.auditStatus == 0>selected</#if> value="0">未审核</option>
                             <option <#if obj.auditStatus == 1>selected</#if> value="1">审核通过</option>
                             <option <#if obj.auditStatus == -1>selected</#if> value="-1">审核不通过</option>
@@ -155,7 +161,7 @@
                         <label class="layui-form-label">是否作废 1 作废 0 在用</label>
                     <div class="layui-input-block">
 
-                         <select name="nullifyStatus">
+                         <select name="nullifyStatus" <#if obj.nullifyStatus == 1>disabled</#if>>
                               <option value="0" <#if obj.nullifyStatus == 0>selected</#if>>在用</option>
                               <option value="1" <#if obj.nullifyStatus == 1>selected</#if>>作废</option>
                           </select>
