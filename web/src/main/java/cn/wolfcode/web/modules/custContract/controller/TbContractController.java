@@ -5,6 +5,8 @@ import cn.wolfcode.web.commons.utils.LayuiTools;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.log.LogModules;
+import cn.wolfcode.web.modules.sys.entity.SysUser;
+import cn.wolfcode.web.modules.sys.form.LoginForm;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -24,6 +26,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 /**
  * @author wbb
@@ -71,7 +76,12 @@ public class TbContractController extends BaseController {
     @PostMapping("save")
     @SysLog(value = LogModules.SAVE, module =LogModule)
     @PreAuthorize("hasAuthority('custContract:custContractInfo:add')")
-    public ResponseEntity<ApiModel> save(@Validated({AddGroup.class}) @RequestBody TbContract entity) {
+    public ResponseEntity<ApiModel> save(@Validated({AddGroup.class}) @RequestBody TbContract entity, HttpServletRequest request) {
+        //录入时间
+        entity.setInputTime(LocalDateTime.now());
+        //录入人
+        SysUser loginUser = (SysUser)request.getSession().getAttribute(LoginForm.LOGIN_USER_KEY);
+        entity.setInputUser(loginUser.getUserId());
         entityService.save(entity);
         return ResponseEntity.ok(ApiModel.ok());
     }
@@ -81,6 +91,8 @@ public class TbContractController extends BaseController {
     @PutMapping("update")
     @PreAuthorize("hasAuthority('custContract:custContractInfo:update')")
     public ResponseEntity<ApiModel> update(@Validated({UpdateGroup.class}) @RequestBody TbContract entity) {
+
+        entity.setUpdateTime(LocalDateTime.now());//修改时间录入
         entityService.updateById(entity);
         return ResponseEntity.ok(ApiModel.ok());
     }
