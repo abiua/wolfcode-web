@@ -1,33 +1,21 @@
-layui.use(['form', 'layer', 'laydate'], function () {
+layui.use(['form', 'layer'], function () {
     var form = layui.form,
         layer = layui.layer,
-        laydate = layui.laydate,
         $ = layui.jquery;
 
 
-    laydate.render({
-        elem: '#startDate'
-
-    });
-
-    laydate.render({
-        elem: '#endDate'
-
-    });
-
     form.on('submit(Add-filter)', function (data) {
         $.ajax({
-            url: web.rootPath() + "custContractInfo/save",
-            type: "post",
+            url: web.rootPath() + "orderInfo/update",
             contentType: "application/json",
+            type: "put",
             data: JSON.stringify(data.field),
             dataType: 'json',
-            traditional: true,
             success: function (data) {
                 layer.msg("操作成功", {
                     icon: 1,
                     success: function () {
-                        reloadTb("Save-frame", "#SearchBtn");
+                        reloadTb("Update-frame", "#SearchBtn");
                     }
                 });
             },
@@ -35,7 +23,7 @@ layui.use(['form', 'layer', 'laydate'], function () {
                 layer.msg(e.responseJSON.message, {icon: 2});
             }
 
-        });
+        })
         return false;
     });
 

@@ -39,18 +39,18 @@ public class GeneratorTest {
                 // 页面上的父上下文
                 // 自己的上下文
                 "1111",
-                "客户合同管理",
+                "订货单管理",
                 null,
-                "custContract",
-                "custContractInfo",
+                "order",
+                "orderInfo",
                 "wbb",
-                "127.0.0.1",
+                "43.138.179.64",
                 "3306",
                 "nojoke?useSSL=false&serverTimezone=GMT%2B8&characterEncoding=utf8",
                 "root",
-                "123456",
+                "Er1351358292810.",
                 new String[]{"bmd_", "mp_", "SYS_"},
-                new String[]{"tb_contract"},false
+                new String[]{"tb_order_info"},false
         );
     }
 

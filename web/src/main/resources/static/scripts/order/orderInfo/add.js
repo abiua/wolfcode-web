@@ -1,23 +1,11 @@
-layui.use(['form', 'layer', 'laydate'], function () {
+layui.use(['form', 'layer'], function () {
     var form = layui.form,
         layer = layui.layer,
-        laydate = layui.laydate,
         $ = layui.jquery;
-
-
-    laydate.render({
-        elem: '#startDate'
-
-    });
-
-    laydate.render({
-        elem: '#endDate'
-
-    });
 
     form.on('submit(Add-filter)', function (data) {
         $.ajax({
-            url: web.rootPath() + "custContractInfo/save",
+            url: web.rootPath() + "orderInfo/save",
             type: "post",
             contentType: "application/json",
             data: JSON.stringify(data.field),

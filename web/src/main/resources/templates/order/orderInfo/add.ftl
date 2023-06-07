@@ -26,79 +26,75 @@
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">合同客户</label>
+                        <label class="layui-form-label">所属客户id</label>
                     <div class="layui-input-block">
-<#--                        <input type="text"  name="custId"  placeholder="请输入"  autocomplete="off" class="layui-input">-->
-                        <select name="custId">
-                            <#list customerList as list>
-                                <option value="${list.id}">${list.customerName}</option>
-                            </#list>
-                        </select>
+                        <input type="text"  name="custId"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">合同名称</label>
+                        <label class="layui-form-label">产品名称</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="contractName"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  name="prodName"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">合同编码</label>
+                        <label class="layui-form-label">产品数量</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="contractCode"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  name="amounts"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">合同金额</label>
+                        <label class="layui-form-label">产品价格</label>
                     <div class="layui-input-block">
-                        <input type="number"  name="amounts"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  name="price"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">合同生效开始时间</label>
+                        <label class="layui-form-label">状态 0 未发货 1 已发货 2 已收货</label>
                     <div class="layui-input-block">
-                        <input type="text" id="startDate" name="startDate"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  name="status"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">合同生效结束时间</label>
+                        <label class="layui-form-label">收货人</label>
                     <div class="layui-input-block">
-                        <input type="text" id="endDate" name="endDate"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  name="receiver"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">合同内容</label>
+                        <label class="layui-form-label">收货人电话</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="content"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  name="linkPhone"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">是否盖章确认 0 否 1 是</label>
+                        <label class="layui-form-label">收货地址</label>
                     <div class="layui-input-block">
-
-                        <select name="affixSealStatus">
-                               <option value="1">是</option>
-                               <option value="0">否</option>
-                        </select>
+                        <input type="text"  name="address"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">审核状态</label>
-                    <select name="auditStatus">
-                        <option value="">请输入</option>
-                        <option value="0">未审核</option>
-                        <option value="1">审核通过</option>
-                        <option value="2">审核不通过</option>
-                    </select>
+                        <label class="layui-form-label">物流</label>
+                    <div class="layui-input-block">
+                        <input type="text"  name="logistcs"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                    </div>
                 </div>
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">是否作废 1 作废 0 在用</label>
+                        <label class="layui-form-label">物流单号</label>
                     <div class="layui-input-block">
-
-                        <select name="nullifyStatus">
-                                <option value="0">在用</option>
-                                <option value="1">作废</option>
-                        </select>
+                        <input type="text"  name="logisticsCode"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-lg6">
+                        <label class="layui-form-label">发货时间</label>
+                    <div class="layui-input-block">
+                        <input type="text"  name="deliverTime"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-col-lg6">
+                        <label class="layui-form-label">收货时间</label>
+                    <div class="layui-input-block">
+                        <input type="text"  name="receiveTime"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
@@ -115,5 +111,5 @@
 
 <script src="${request.contextPath}/layuiadmin/layui/layui.js"></script>
 <script src="${request.contextPath}/layui-extend.js"></script>
-<script type="text/javascript" src="${request.contextPath}/scripts/custContract/custContractInfo/add.js?_=${randomNum}"></script>
+<script type="text/javascript" src="${request.contextPath}/scripts/order/orderInfo/add.js?_=${randomNum}"></script>
 </body>
