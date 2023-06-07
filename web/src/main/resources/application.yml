@@ -102,7 +102,7 @@ spring:
     store-type: redis
     redis:
       namespace: ${spring.application.name}:AHSJ:SESSION
-    timeout: 1800s
+    timeout: -1
   freemarker:
     cache: true
     charset: UTF-8

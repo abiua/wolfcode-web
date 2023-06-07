@@ -35,6 +35,13 @@ public class TbCustLinkman implements Serializable {
     @TableField(exist = false)
     @Excel(name = "所属企业")
     private String custName;
+    public String getCustName() {
+        return custName;
+    }
+    public void setCustName(String custName) {
+        this.custName = custName;
+    }
+
     public static long getSerialVersionUID(){
         return serialVersionUID;
     }
@@ -63,6 +70,7 @@ public class TbCustLinkman implements Serializable {
      * 年龄
      */
     @LessThan("100")
+    @Excel(name = "年龄")
     private Integer age;
 
     /**
@@ -78,17 +86,20 @@ public class TbCustLinkman implements Serializable {
      * 职位
      */
     @Length(max = 20, message = "职位不能超过20位", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "职位")
     private String position;
 
     /**
      * 部门
      */
     @Length(max = 20, message = "部门不能超过20位", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "部门")
     private String department;
 
     /**
      * 备注信息?
      */
+    @Excel(name = "备注信息")
     private String remark;
 
     /**
@@ -110,6 +121,7 @@ public class TbCustLinkman implements Serializable {
     /**
      * 录入时间
      */
+    @Excel(name = "录入时间")
     private LocalDateTime inputTime;
 
     public String getId() {

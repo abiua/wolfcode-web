@@ -24,6 +24,7 @@ layui.use(['form', 'layer', 'laydate'], function () {
             dataType: 'json',
             traditional: true,
             success: function (data) {
+
                 layer.msg("操作成功", {
                     icon: 1,
                     success: function () {
@@ -32,6 +33,7 @@ layui.use(['form', 'layer', 'laydate'], function () {
                 });
             },
             error: function (e) {
+
                 layer.msg(e.responseJSON.message, {icon: 2});
             }
 
