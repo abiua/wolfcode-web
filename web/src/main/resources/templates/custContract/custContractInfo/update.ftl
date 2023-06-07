@@ -35,13 +35,22 @@
 
 
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">客户id</label>
+                        <label class="layui-form-label">合同客户</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="custId"
-                               value="${obj.custId}"
-                               autocomplete="off"
-                               class="layui-input">
+<#--                        <input type="text"-->
+<#--                               name="custId"-->
+<#--                               value="${obj.custId}"-->
+<#--                               autocomplete="off"-->
+<#--                               class="layui-input">-->
+                        <select name="custId">
+                            <#list customerList as list>
+                                <#if obj.custId==list.id>
+                                    <option selected value="${list.id}">${list.customerName}</option>
+                                <#else>
+                                    <option value="${list.id}">${list.customerName}</option>
+                                </#if>
+                            </#list>
+                        </select>
                     </div>
                 </div>
 
@@ -84,24 +93,30 @@
 
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">合同生效开始时间</label>
+<#--                    <div class="layui-input-block">-->
+<#--                        <input type="text"-->
+<#--                               name="startDate"-->
+<#--                               value="${obj.startDate}"-->
+<#--                               autocomplete="off"-->
+<#--                               class="layui-input">-->
+<#--                    </div>-->
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="startDate"
-                               value="${obj.startDate}"
-                               autocomplete="off"
-                               class="layui-input">
+                        <input value="${obj.startDate}" type="text" id="startDate" name="startDate" placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
 
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">合同生效结束时间</label>
+<#--                    <div class="layui-input-block">-->
+<#--                        <input type="text"-->
+<#--                               name="endDate"-->
+<#--                               value="${obj.endDate}"-->
+<#--                               autocomplete="off"-->
+<#--                               class="layui-input">-->
+<#--                    </div>-->
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="endDate"
-                               value="${obj.endDate}"
-                               autocomplete="off"
-                               class="layui-input">
+                        <input value="${obj.endDate}" type="text" id="endDate" name="endDate" placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
@@ -133,11 +148,16 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">审核状态 0 未审核 1 审核通过 -1 审核不通过</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="auditStatus"
-                               value="${obj.auditStatus}"
-                               autocomplete="off"
-                               class="layui-input">
+<#--                        <input type="text"-->
+<#--                               name="auditStatus"-->
+<#--                               value="${obj.auditStatus}"-->
+<#--                               autocomplete="off"-->
+<#--                               class="layui-input">-->
+                        <select name="auditStatus">
+                            <option <#if obj.auditStatus == 0>selected</#if> value="0">未审核</option>
+                            <option <#if obj.auditStatus == 1>selected</#if> value="1">审核通过</option>
+                            <option <#if obj.auditStatus == -1>selected</#if> value="-1">审核不通过</option>
+                        </select>
                     </div>
                 </div>
 

@@ -62,6 +62,8 @@ public class TbContractController extends BaseController {
     @GetMapping("/{id}.html")
     @PreAuthorize("hasAuthority('custContract:custContractInfo:update')")
     public ModelAndView toUpdate(@PathVariable("id") String id, ModelAndView mv) {
+        List<TbCustomer> customerList = customerService.list();
+        mv.addObject("customerList",customerList);
         mv.setViewName("custContract/custContractInfo/update");
         mv.addObject("obj", entityService.getById(id));
         mv.addObject("id", id);

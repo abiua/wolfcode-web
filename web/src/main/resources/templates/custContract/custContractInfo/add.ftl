@@ -84,7 +84,7 @@
                         <option value="">请输入</option>
                         <option value="0">未审核</option>
                         <option value="1">审核通过</option>
-                        <option value="2">审核不通过</option>
+                        <option value="-1">审核不通过</option>
                     </select>
                 </div>
                 <div class="layui-col-lg6">
