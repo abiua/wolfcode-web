@@ -34,7 +34,10 @@ public class TbContract implements Serializable {
     public String getCustIdName() {return custIdName;}
     public void setCustIdName(String custIdName) {this.custIdName = custIdName;}
 
-
+    @TableField(exist = false)
+    private String inputName;
+    public String getInputName() {return inputName;}
+    public void setInputName(String inputName) {this.inputName = inputName;}
     /**
      * 合同名称
      */

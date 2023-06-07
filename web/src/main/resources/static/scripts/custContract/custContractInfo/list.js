@@ -28,10 +28,30 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     {field: 'startDate', title: '合同生效开始时间', minWidth: 100, align: "center"},
                     {field: 'endDate', title: '合同生效结束时间', minWidth: 100, align: "center"},
                     {field: 'content', title: '合同内容', minWidth: 100, align: "center"},
-                    {field: 'affixSealStatus', title: '是否盖章确认 0 否 1 是', minWidth: 100, align: "center"},
-                    {field: 'auditStatus', title: '审核状态 0 未审核 1 审核通过 -1 审核不通过', minWidth: 100, align: "center"},
-                    {field: 'nullifyStatus', title: '是否作废 1 作废 0 在用', minWidth: 100, align: "center"},
-                    {field: 'inputUser', title: '录入人', minWidth: 100, align: "center"},
+                    {field: 'affixSealStatus', title: '是否盖章确认 0 否 1 是', minWidth: 100, align: "center", templet: function (d) {
+                            if (d.affixSealStatus == '0') {
+                                return "<button class=\"layui-btn layui-btn-warm layui-btn-xs\">否</button>";
+                            } else if (d.affixSealStatus == '1') {
+                                return "<button class=\"layui-btn  layui-btn-xs\">是</button>";
+                            }
+                        }},
+                    {field: 'auditStatus', title: '审核状态 0 未审核 1 审核通过 -1 审核不通过', minWidth: 100, align: "center", templet: function (d) {
+                            if (d.auditStatus == '0') {
+                                return "<button class=\"layui-btn layui-btn-warm layui-btn-xs\">未审核</button>";
+                            } else if (d.auditStatus == '1') {
+                                return "<button class=\"layui-btn  layui-btn-xs\">通过</button>";
+                            } else if (d.auditStatus == '-1') {
+                                return "<button class=\"layui-btn layui-btn-danger layui-btn-xs\">不通过</button>";
+                            }
+                        }},
+                    {field: 'nullifyStatus', title: '是否作废 1 作废 0 在用', minWidth: 100, align: "center", templet: function (d) {
+                            if (d.nullifyStatus == '0') {
+                                return "<button class=\"layui-btn  layui-btn-xs\">在用</button>";
+                            } else if (d.nullifyStatus == '1') {
+                                return "<button class=\"layui-btn layui-btn-danger layui-btn-xs\">作废</button>";
+                            }
+                        }},
+                    {field: 'inputName', title: '录入人', minWidth: 100, align: "center"},
                     {field: 'inputTime', title: '录入时间', minWidth: 100, align: "center"},
                     {field: 'updateTime', title: '修改时间', minWidth: 100, align: "center"},
 

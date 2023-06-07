@@ -9,6 +9,7 @@ import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
 import cn.wolfcode.web.modules.log.LogModules;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 import cn.wolfcode.web.modules.sys.form.LoginForm;
+import cn.wolfcode.web.modules.sys.service.SysUserService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -49,6 +50,9 @@ public class TbContractController extends BaseController {
 
     @Autowired
     private ITbCustomerService customerService;
+
+    @Autowired
+    private SysUserService sysUserService;
 
     @GetMapping("/list.html")
     public String list() {
@@ -94,6 +98,10 @@ public class TbContractController extends BaseController {
         for (TbContract record : records) {
             TbCustomer customer = customerService.getById(record.getCustId());
             record.setCustIdName(customer.getCustomerName());
+
+            //录入人
+             SysUser sysUser = sysUserService.getById(record.getInputUser());
+             record.setInputName(sysUser.getUsername());
         }
 
         return ResponseEntity.ok(LayuiTools.toLayuiTableModel(page));
