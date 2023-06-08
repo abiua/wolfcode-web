@@ -93,7 +93,6 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     parameterName: parameterName,
                     nullifyStatus,
                     affixSealStatus,
-                    parameterName: parameterName,
                     auditStatus: auditStatus
                 }
             });

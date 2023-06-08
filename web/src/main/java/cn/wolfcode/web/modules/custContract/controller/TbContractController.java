@@ -68,7 +68,6 @@ public class TbContractController extends BaseController {
 
     @GetMapping("/list.html")
     public String list() {
-        System.out.println("进来了");
         return "custContract/custContractInfo/list";
 
 //        mv.addObject("obj", entityService.getById(id));

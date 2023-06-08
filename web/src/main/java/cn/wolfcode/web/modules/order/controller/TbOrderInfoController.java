@@ -12,12 +12,14 @@ import cn.wolfcode.web.modules.log.LogModules;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 import cn.wolfcode.web.modules.sys.form.LoginForm;
 import cn.wolfcode.web.modules.sys.service.SysUserService;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 import cn.wolfcode.web.modules.order.entity.TbOrderInfo;
 import cn.wolfcode.web.modules.order.service.ITbOrderInfoService;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import link.ahsj.core.annotations.AddGroup;
 import link.ahsj.core.annotations.SameUrlData;
 import link.ahsj.core.annotations.SysLog;
@@ -34,8 +36,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -62,6 +68,20 @@ public class TbOrderInfoController extends BaseController {
 
     private static final String LogModule = "TbOrderInfo";
 
+
+    @Autowired
+    private IService<TbOrderInfo> userService;
+    public List<TbOrderInfo> queryUsers(LocalDate startTime, LocalDate endTime) {
+        QueryWrapper<TbOrderInfo> wrapper = new QueryWrapper<>();
+        // between 方法用于添加时间段条件
+        wrapper.between("create_time", startTime, endTime);
+        // selectSql 方法用于在查询语句中添加 SQL 函数
+        wrapper.select("*, TIMESTAMPDIFF(SECOND, create_time, NOW()) as time_diff");
+
+        List<TbOrderInfo> userList = userService.list(wrapper);
+        // 处理查询结果
+        return userList;
+    }
 
 
     @GetMapping("/list.html")
@@ -94,14 +114,43 @@ public class TbOrderInfoController extends BaseController {
 
     @RequestMapping("list")
     @PreAuthorize("hasAuthority('order:orderInfo:list')")
-    public ResponseEntity page(LayuiPage layuiPage, String parameterName) {
+    public ResponseEntity page(LayuiPage layuiPage, String parameterName, String loginDate) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
-
+        System.out.println(parameterName);
+        System.out.println(loginDate);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime past_7 = LocalDateTime.now().minusDays(7);
+        LocalDateTime past_31 = LocalDateTime.now().minusDays(31);
+        LocalDateTime past_365 = LocalDateTime.now().minusDays(365);
+        List<TbOrderInfo> orderInfoList = new ArrayList<>();
+        if (loginDate != null) {
+            switch (loginDate) {
+                case "0":
+                    orderInfoList = entityService.queryByTime(past_7, now);
+                    break;
+                case "1":
+                    orderInfoList = entityService.queryByTime(past_31, now);
+                    break;
+                case "2":
+                    orderInfoList = entityService.queryByTime(past_365, now);
+                    break;
+            }
+        }else {
+            orderInfoList = entityService.list();
+        }
+        System.out.println(orderInfoList.size());
+        List<String> order_time = new ArrayList<>();
+        for (TbOrderInfo info : orderInfoList) {
+            order_time.add(info.getId());
+        }
+
         TbCustomer tbCustomers = customerService.lambdaQuery()
                 .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
                 .list().get(0);
         page = entityService.lambdaQuery()
+                .in(TbOrderInfo::getId, order_time)
                 .like(StringUtils.isNotEmpty(parameterName), TbOrderInfo::getCustId, tbCustomers.getId())
                 .page(page);
 
@@ -117,6 +166,7 @@ public class TbOrderInfoController extends BaseController {
 
             SysUser inputUser = sysUserService.getById(record.getInputUser());
             record.setInputUserName(inputUser.getUsername());
+
 
             record.setReceiverName(collect.getOrDefault(record.getReceiver(), ""));
         }
