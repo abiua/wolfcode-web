@@ -32,6 +32,7 @@ public class TbOrderInfo implements Serializable {
     private String custId;
 
     @TableField(exist = false)
+    @Excel(name = "所属企业")
     private String custIdName;
 
     public static long getSerialVersionUID(){
@@ -51,21 +52,25 @@ public class TbOrderInfo implements Serializable {
      */
     @Length(max = 50,message = "产品名称不能超过50字!!!",groups = {AddGroup.class, UpdateGroup.class})
     @NotBlank(message = "产品名称不能为空",groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "产品名称")
     private String prodName;
 
     /**
      * 产品数量
      */
+    @Excel(name = "数量")
     private Integer amounts;
 
     /**
      * 产品价格
      */
+    @Excel(name = "价格")
     private Float price;
 
     /**
      * 状态 0 未发货 1 已发货 2 已收货
      */
+    @Excel(name = "状态",replace = {"未发货_0","已发货_1","已收货_2"})
     private Integer status;
 
     /**
@@ -74,6 +79,13 @@ public class TbOrderInfo implements Serializable {
 
     private String receiver;
 
+
+    /**
+     * 收货名称
+     */
+    @TableField(exist = false)
+    @Excel(name = "收货人")
+    private String receiverName;
     public String getReceiverName() {
         return receiverName;
     }
@@ -83,48 +95,50 @@ public class TbOrderInfo implements Serializable {
     }
 
     /**
-     * 收货名称
-     */
-    @TableField(exist = false)
-    private String receiverName;
-
-    /**
      * 收货人电话
      */
     @Length(max = 20,message = "收货人电话字数不能超过20",groups = {AddGroup.class,UpdateGroup.class})
+    @Excel(name = "收货人电话")
     private String linkPhone;
 
     /**
      * 收货地址
      */
 
+    @Excel(name = "收货地址")
     private String address;
 
     /**
      * 物流
      */
+    @Excel(name = "物流")
     private String logistcs;
 
     /**
      * 物流单号
      */
+    @Excel(name = "物流单号")
     private String logisticsCode;
 
     /**
      * 发货时间
      */
+    @Excel(name = "发货时间")
     private LocalDateTime deliverTime;
 
     /**
      * 收货时间
      */
+    @Excel(name = "收货时间")
     private LocalDateTime receiveTime;
 
     /**
      * 录入人
      */
     private String inputUser;
+
     @TableField(exist = false)
+    @Excel(name = "录入人")
     private String inputUserName;
 
     public String getInputUserName() {
@@ -137,6 +151,7 @@ public class TbOrderInfo implements Serializable {
     /**
      * 录入时间
      */
+    @Excel(name = "录入时间")
     private LocalDateTime inputTime;
 
     public String getInputUser() {

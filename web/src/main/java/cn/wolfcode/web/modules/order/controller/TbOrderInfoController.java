@@ -1,7 +1,10 @@
 package cn.wolfcode.web.modules.order.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.LayuiTools;
+import cn.wolfcode.web.commons.utils.PoiExportHelper;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custLinkManInfo.entity.TbCustLinkman;
@@ -26,6 +29,7 @@ import link.ahsj.core.annotations.SysLog;
 import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,6 +39,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -212,6 +218,88 @@ public class TbOrderInfoController extends BaseController {
     public ResponseEntity<ApiModel> delete(@PathVariable("id") String id) {
         entityService.removeById(id);
         return ResponseEntity.ok(ApiModel.ok());
+    }
+
+    /**
+     * 导出
+     *
+     * @param parameterName
+     *
+     */
+    @RequestMapping("export")
+    public void export(HttpServletResponse response, String parameterName,String loginDate){
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime past_7 = LocalDateTime.now().minusDays(7);
+        LocalDateTime past_31 = LocalDateTime.now().minusDays(31);
+        LocalDateTime past_365 = LocalDateTime.now().minusDays(365);
+        List<TbOrderInfo> orderInfoList = new ArrayList<>();
+        if (loginDate != null) {
+            switch (loginDate) {
+                case "0":
+                    orderInfoList = entityService.queryByTime(past_7, now);
+                    break;
+                case "1":
+                    orderInfoList = entityService.queryByTime(past_31, now);
+                    break;
+                case "2":
+                    orderInfoList = entityService.queryByTime(past_365, now);
+                    break;
+            }
+        }else {
+            orderInfoList = entityService.list();
+        }
+
+        List<String> order_time = new ArrayList<>();
+        for (TbOrderInfo info : orderInfoList) {
+            order_time.add(info.getId());
+        }
+
+        TbCustomer tbCustomers = customerService.lambdaQuery()
+                .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
+                .list().get(0);
+
+
+
+        //1.导出内容
+        List<TbOrderInfo> orderInfos = entityService.lambdaQuery()
+                .in(TbOrderInfo::getId, order_time)
+                .like(StringUtils.isNotEmpty(parameterName), TbOrderInfo::getCustId, tbCustomers.getId()).list();
+
+        for (TbOrderInfo orderInfo : orderInfos) {
+
+            orderInfo.setCustIdName(customerService.getById(orderInfo.getCustId()).getCustomerName());
+
+            orderInfo.setReceiverName(tbCustLinkmanService.getById(orderInfo.getReceiver()).getLinkman());
+
+            orderInfo.setInputUserName(sysUserService.getById(orderInfo.getInputUser()).getUsername());
+
+        }
+
+        //2.样式
+        ExportParams params = new ExportParams();
+
+        //3.组装对象
+        /**
+         * 参数一 样式
+         * 参数二 实体类
+         * 参数三 导出内容
+         *
+         * error数组越界：未在实体类中设置导出字段
+         */
+        Workbook excel = ExcelExportUtil.exportExcel(params, TbOrderInfo.class, orderInfos);
+
+        //4.导出
+        try {
+            /**
+             * 参数一 HttpServletResponse
+             * 参数二 导出表名
+             * 参数三 workbook对象
+             */
+            PoiExportHelper.exportExcel(response,"订货单",excel);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 }

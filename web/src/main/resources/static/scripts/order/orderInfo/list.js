@@ -108,7 +108,8 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
             var eix;
             //获取搜索条件值
             var parameterName = $("#searchForm").find("input[name='parameterName']").val().trim();
-            var url = web.rootPath()+"orderInfo/export?parameterName="+parameterName;
+            var loginDate = $("#searchForm").find("select[name='loginDate']").val();
+            var url = web.rootPath()+"orderInfo/export?parameterName="+parameterName+"&loginDate="+loginDate;
             $.fileDownload(url, {
                 httpMethod: 'POST',
                 prepareCallback: function (url) {
