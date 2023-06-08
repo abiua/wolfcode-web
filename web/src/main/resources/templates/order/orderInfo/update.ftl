@@ -35,13 +35,17 @@
 
 
                 <div class="layui-col-lg6">
-                        <label class="layui-form-label">所属客户id</label>
+                        <label class="layui-form-label">企业客户</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="custId"
-                               value="${obj.custId}"
-                               autocomplete="off"
-                               class="layui-input">
+                        <select name="custId" lay-filter="custId-select-filterUpdate">
+                              <#list customerList as list>
+                                      <#if obj.custId==list.id>
+                                          <option selected value="${list.id}">${list.customerName}</option>
+                                      <#else>
+                                        <option value="${list.id}">${list.customerName}</option>
+                                      </#if>
+                              </#list>
+                        </select>
                     </div>
                 </div>
 
@@ -85,11 +89,11 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">状态 0 未发货 1 已发货 2 已收货</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="status"
-                               value="${obj.status}"
-                               autocomplete="off"
-                               class="layui-input">
+                        <select name="status">
+                               <option value="0" <#if obj.status == 0>selected</#if>>未发货</option>
+                               <option value="1" <#if obj.status == 1>selected</#if>>已发货</option>
+                               <option value="2" <#if obj.status == 2>selected</#if>>已收货</option>
+                        </select>
                     </div>
                 </div>
 
@@ -97,11 +101,7 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">收货人</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="receiver"
-                               value="${obj.receiver}"
-                               autocomplete="off"
-                               class="layui-input">
+                        <select lay-filter="linkman-select-filter" data-receiver="${obj.receiver}}" name="receiver" id="receiverUpdate"></select>
                     </div>
                 </div>
 

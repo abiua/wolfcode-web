@@ -57,14 +57,18 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">状态 0 未发货 1 已发货 2 已收货</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="status"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <select name="status">
+                                 <option value="0">未发货</option>
+                                 <option value="1">已发货</option>
+                                 <option value="2">已收货</option>
+                        </select>
                     </div>
                 </div>
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">收货人</label>
                     <div class="layui-input-block">
 <#--                        <input type="text"  name="receiver"  placeholder="请输入"  autocomplete="off" class="layui-input">-->
-                        <select lay-filter="linkman-select-filter" name="linkmanId" id="linkman"></select>
+                        <select lay-filter="linkman-select-filter" name="receiver" id="receiver"></select>
                     </div>
                 </div>
                 <div class="layui-col-lg6">
@@ -95,13 +99,13 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">发货时间</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="deliverTime"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text"  id="deliverTime" name="deliverTime"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">收货时间</label>
                     <div class="layui-input-block">
-                        <input type="text"  name="receiveTime"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                        <input type="text" id="receiveTime" name="receiveTime"  placeholder="请输入"  autocomplete="off" class="layui-input">
                     </div>
                 </div>
 
