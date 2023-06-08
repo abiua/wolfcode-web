@@ -21,9 +21,6 @@
             <input type="hidden" id="id" name="id" value="${id}">
             <div class="layui-row layui-col-space10 layui-form-item">
 
-
-
-
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">企业客户</label>
                     <div class="layui-input-block">
@@ -69,6 +66,7 @@
                     <div class="layui-input-block">
                         <input type="text"
                                name="price"
+                               id="price"
                                value="${obj.price}"
                                autocomplete="off"
                                class="layui-input">
@@ -194,6 +192,9 @@
        if(value ==1 ){
                statusUpdate.options[0].disabled ="true"
        }
+
+       let update = price.value.replace(/,/g,'')
+       price.value = update
 </script>
 <script type="text/javascript" src="${request.contextPath}/scripts/order/orderInfo/update.js?_=${randomNum}"></script>
 </body>

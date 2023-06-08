@@ -74,6 +74,7 @@
                         <label class="layui-form-label">合同金额</label>
                     <div class="layui-input-block">
                         <input type="text"
+                               id="price"
                                name="amounts"
                                value="${obj.amounts}"
                                autocomplete="off"
@@ -182,7 +183,8 @@
 <script src="${request.contextPath}/layui-extend.js"></script>
 <script src="${request.contextPath}/webjars/jquery/jquery.min.js"></script>
 <script>
-
+       let update = price.value.replace(/,/g,'')
+       price.value = update
 </script>
 <script type="text/javascript" src="${request.contextPath}/scripts/custContract/custContractInfo/update.js?_=${randomNum}"></script>
 </body>
