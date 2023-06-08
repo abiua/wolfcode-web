@@ -9,7 +9,11 @@ import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
 import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
+import cn.wolfcode.web.modules.linkVisit.entity.TbVisit;
+import cn.wolfcode.web.modules.linkVisit.service.ITbVisitService;
 import cn.wolfcode.web.modules.log.LogModules;
+import cn.wolfcode.web.modules.order.entity.TbOrderInfo;
+import cn.wolfcode.web.modules.order.service.ITbOrderInfoService;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 import cn.wolfcode.web.modules.sys.form.LoginForm;
 import cn.wolfcode.web.modules.sys.service.SysUserService;
@@ -28,6 +32,7 @@ import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -60,6 +65,12 @@ public class TbCustLinkmanController extends BaseController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private ITbVisitService visitService;
+
+    @Autowired
+    private ITbOrderInfoService orderInfoService;
 
     private static final String LogModule = "TbCustLinkman";
 
@@ -137,6 +148,13 @@ public class TbCustLinkmanController extends BaseController {
     @DeleteMapping("delete/{id}")
     @PreAuthorize("hasAuthority('custLinkMan:custLinkManInfo:delete')")
     public ResponseEntity<ApiModel> delete(@PathVariable("id") String id) {
+
+        //删除联系人同时删除订货单内容
+        orderInfoService.lambdaUpdate().eq(TbOrderInfo::getReceiver,id).remove();
+
+        //删除联系人同时删除走访内容
+        visitService.lambdaUpdate().eq(TbVisit::getLinkmanId,id).remove();
+
         entityService.removeById(id);
         return ResponseEntity.ok(ApiModel.ok());
     }

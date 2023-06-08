@@ -10,9 +10,15 @@ import cn.wolfcode.web.commons.entity.ExcelExportEntityWrapper;
 import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.*;
 import cn.wolfcode.web.modules.BaseController;
+import cn.wolfcode.web.modules.custContract.entity.TbContract;
+import cn.wolfcode.web.modules.custContract.service.ITbContractService;
 import cn.wolfcode.web.modules.custLinkManInfo.entity.TbCustLinkman;
 import cn.wolfcode.web.modules.custLinkManInfo.service.ITbCustLinkmanService;
+import cn.wolfcode.web.modules.linkVisit.entity.TbVisit;
+import cn.wolfcode.web.modules.linkVisit.service.ITbVisitService;
 import cn.wolfcode.web.modules.log.LogModules;
+import cn.wolfcode.web.modules.order.entity.TbOrderInfo;
+import cn.wolfcode.web.modules.order.service.ITbOrderInfoService;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 import cn.wolfcode.web.modules.sys.form.LoginForm;
 import cn.wolfcode.web.modules.sys.service.SysUserService;
@@ -65,6 +71,16 @@ public class TbCustomerController extends BaseController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private ITbVisitService visitService;
+
+    @Autowired
+    private ITbContractService contractService;
+
+    @Autowired
+    private ITbOrderInfoService orderInfoService;
+
 
     private static final String LogModule = "TbCustomer";
 
@@ -191,8 +207,14 @@ public class TbCustomerController extends BaseController {
         //删除企业时同时删除旗下联系人
         custLinkmanService.lambdaUpdate().eq(TbCustLinkman::getCustId,id).remove();
 
-        //删除企业时同时删除其访客访问记录？
+        //删除企业时同时删除其访客访问记录
+        visitService.lambdaUpdate().eq(TbVisit::getCustId,id).remove();
 
+        //删除企业时同时删除合同表内容
+        contractService.lambdaUpdate().eq(TbContract::getCustId,id).remove();
+
+        //删除企业时同时删除订货单表内容
+        orderInfoService.lambdaUpdate().eq(TbOrderInfo::getCustId,id).remove();
 
         //删除企业
         entityService.removeById(id);
