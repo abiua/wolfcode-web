@@ -1,5 +1,10 @@
 package cn.wolfcode.web.modules.order.entity;
 
+import link.ahsj.core.annotations.AddGroup;
+import link.ahsj.core.annotations.UpdateGroup;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -18,24 +23,28 @@ public class TbOrderInfo implements Serializable {
     private String id;
 
     /**
-     * 所属客户id
+     * 所属企业id
      */
     private String custId;
 
     /**
      * 产品名称
      */
+    @Length(max = 50,message = "产品名称不能超过50字!!!",groups = {AddGroup.class, UpdateGroup.class})
+    @NotBlank(message = "产品名称不能为空",groups = {AddGroup.class, UpdateGroup.class})
     private String prodName;
 
     /**
      * 产品数量
      */
+    @NotBlank(message = "产品数量不能为空",groups = {AddGroup.class, UpdateGroup.class})
     private Integer amounts;
 
     /**
      * 产品价格
      */
-    private Integer price;
+    @NotBlank(message = "产品价格不能为空",groups = {AddGroup.class, UpdateGroup.class})
+    private Float price;
 
     /**
      * 状态 0 未发货 1 已发货 2 已收货
@@ -43,18 +52,21 @@ public class TbOrderInfo implements Serializable {
     private Integer status;
 
     /**
-     * 收货人
+     * 收货人--通过企业id获得
      */
+    @Length(max = 30,message = "收货人字数不能超过30",groups = {AddGroup.class,UpdateGroup.class})
     private String receiver;
 
     /**
      * 收货人电话
      */
+    @Length(max = 20,message = "收货人电话字数不能超过20",groups = {AddGroup.class,UpdateGroup.class})
     private String linkPhone;
 
     /**
      * 收货地址
      */
+
     private String address;
 
     /**
@@ -105,11 +117,11 @@ public class TbOrderInfo implements Serializable {
     public void setAmounts(Integer amounts) {
         this.amounts = amounts;
     }
-    public Integer getPrice() {
+    public Float getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Float price) {
         this.price = price;
     }
     public Integer getStatus() {

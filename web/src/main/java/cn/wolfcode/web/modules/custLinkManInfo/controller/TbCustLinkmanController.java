@@ -195,4 +195,10 @@ public class TbCustLinkmanController extends BaseController {
         return ResponseEntity.ok(ApiModel.data(list));
     }
 
+    @RequestMapping("getLinkmanPhone")
+    public ResponseEntity getLinkmanPhone(String id){
+        String phone = entityService.getById(id).getPhone();
+        return ResponseEntity.ok(ApiModel.data(phone));
+    }
+
 }
