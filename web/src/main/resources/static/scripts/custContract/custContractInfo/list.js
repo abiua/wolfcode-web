@@ -120,6 +120,31 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
             });
         }
         ;
+        if(obj.event == 'export'){
+            var eix;
+            //获取搜索条件值
+            var parameterName = $("#searchForm").find("input[name='parameterName']").val().trim();
+            var affixSealStatus = $("#searchForm").find("select[name='affixSealStatus']").val();
+            var nullifyStatus = $("#searchForm").find("select[name='nullifyStatus']").val();
+            var auditStatus = $("#searchForm").find("select[name='auditStatus']").val();
+            var url = web.rootPath()+"custContractInfo/export?parameterName="+parameterName+
+                                        "&affixSealStatus="+affixSealStatus+
+                                        "&nullifyStatus="+nullifyStatus+
+                                        "&auditStatus="+auditStatus;
+            $.fileDownload(url, {
+                httpMethod: 'POST',
+                prepareCallback: function (url) {
+                    eix = layer.load(2);
+                },
+                successCallback: function (url) {
+                    layer.close(eix)
+                },
+                failCallback: function (html, url) {
+                    layer.close(eix)
+                    layer.msg("导出失败", {icon: 2});
+                }
+            });
+        }
     });
     //监听工具条
     table.on('tool(List-toolbar)', function (obj) {
