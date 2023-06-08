@@ -102,6 +102,25 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
             });
         }
         ;
+        if(obj.event == 'export'){
+            var eix;
+            //获取搜索条件值
+            var parameterName = $("#searchForm").find("input[name='parameterName']").val().trim();
+            var url = web.rootPath()+"orderInfo/export?parameterName="+parameterName;
+            $.fileDownload(url, {
+                httpMethod: 'POST',
+                prepareCallback: function (url) {
+                    eix = layer.load(2);
+                },
+                successCallback: function (url) {
+                    layer.close(eix)
+                },
+                failCallback: function (html, url) {
+                    layer.close(eix)
+                    layer.msg("导出失败", {icon: 2});
+                }
+            });
+        }
     });
     //监听工具条
     table.on('tool(List-toolbar)', function (obj) {
