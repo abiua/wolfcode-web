@@ -34,14 +34,16 @@
                             </div>
 
                             <div class="layui-inline">
-                                <label class="layui-form-label">录入时间</label>
+                                <label class="layui-form-label">开始录入时间</label>
                                 <div class="layui-input-block input-box">
-                                    <select name="loginDate">
-                                        <option value="">请选择</option>
-                                        <option value="0">一周内</option>
-                                        <option value="1">一月内</option>
-                                        <option value="2">一年内</option>
-                                    </select>
+                                    <input type="text" id="startDate" name="startDate"  placeholder="请输入"  autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-inline">
+                                <label class="layui-form-label">结束录入时间</label>
+                                <div class="layui-input-block input-box">
+                                    <input type="text" id="endDate" name="endDate"  placeholder="请输入"  autocomplete="off" class="layui-input">
                                 </div>
                             </div>
 

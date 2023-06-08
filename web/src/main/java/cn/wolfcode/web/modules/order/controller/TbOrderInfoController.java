@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.ArrayList;
@@ -120,61 +121,46 @@ public class TbOrderInfoController extends BaseController {
 
     @RequestMapping("list")
     @PreAuthorize("hasAuthority('order:orderInfo:list')")
-    public ResponseEntity page(LayuiPage layuiPage, String parameterName, String loginDate) {
+    public ResponseEntity page(LayuiPage layuiPage, String parameterName, String startDate, String endDate) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
-        System.out.println(parameterName);
-        System.out.println(loginDate);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime past_7 = LocalDateTime.now().minusDays(7);
-        LocalDateTime past_31 = LocalDateTime.now().minusDays(31);
-        LocalDateTime past_365 = LocalDateTime.now().minusDays(365);
-        List<TbOrderInfo> orderInfoList = new ArrayList<>();
-        if (loginDate != null) {
-            switch (loginDate) {
-                case "0":
-                    orderInfoList = entityService.queryByTime(past_7, now);
-                    break;
-                case "1":
-                    orderInfoList = entityService.queryByTime(past_31, now);
-                    break;
-                case "2":
-                    orderInfoList = entityService.queryByTime(past_365, now);
-                    break;
-            }
-        }else {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        List<TbOrderInfo> orderInfoList;
+        if (startDate != null & endDate != null) {
+            orderInfoList = entityService.queryByTime(LocalDateTime.parse(startDate, df), LocalDateTime.parse(endDate, df));
+        }
+        else {
             orderInfoList = entityService.list();
         }
-        System.out.println(orderInfoList.size());
-        List<String> order_time = new ArrayList<>();
-        for (TbOrderInfo info : orderInfoList) {
-            order_time.add(info.getId());
-        }
+        if (orderInfoList.size()!=0) {
+            List<String> order_time = new ArrayList<>();
+            for (TbOrderInfo info : orderInfoList) {
+                order_time.add(info.getId());
+            }
+            TbCustomer tbCustomers = customerService.lambdaQuery()
+                    .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
+                    .list().get(0);
+            page = entityService.lambdaQuery()
+                    .in(TbOrderInfo::getId, order_time)
+                    .like(StringUtils.isNotEmpty(parameterName), TbOrderInfo::getCustId, tbCustomers.getId())
+                    .page(page);
 
-        TbCustomer tbCustomers = customerService.lambdaQuery()
-                .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
-                .list().get(0);
-        page = entityService.lambdaQuery()
-                .in(TbOrderInfo::getId, order_time)
-                .like(StringUtils.isNotEmpty(parameterName), TbOrderInfo::getCustId, tbCustomers.getId())
-                .page(page);
+            List<TbOrderInfo> records = page.getRecords();
+            List<String> ids = new ArrayList<>();
+            for (TbOrderInfo record : records) {
+                ids.add(record.getReceiver());
+            }
+            Map<String, String> collect = tbCustLinkmanService.batchUserInfo(ids).stream().collect(Collectors.toMap(TbCustLinkman::getId, TbCustLinkman::getLinkman));
+            for (TbOrderInfo record : records) {
+                TbCustomer customer = customerService.getById(record.getCustId());
+                record.setCustIdName(customer.getCustomerName());
 
-        List<TbOrderInfo> records = page.getRecords();
-        List<String> ids = new ArrayList<>();
-        for (TbOrderInfo record : records) {
-            ids.add(record.getReceiver());
-        }
-        Map<String, String> collect = tbCustLinkmanService.batchUserInfo(ids).stream().collect(Collectors.toMap(TbCustLinkman::getId, TbCustLinkman::getLinkman));
-        for (TbOrderInfo record : records) {
-            TbCustomer customer = customerService.getById(record.getCustId());
-            record.setCustIdName(customer.getCustomerName());
+                SysUser inputUser = sysUserService.getById(record.getInputUser());
+                record.setInputUserName(inputUser.getUsername());
 
-            SysUser inputUser = sysUserService.getById(record.getInputUser());
-            record.setInputUserName(inputUser.getUsername());
-
-
-            record.setReceiverName(collect.getOrDefault(record.getReceiver(), ""));
+                record.setReceiverName(collect.getOrDefault(record.getReceiver(), ""));
+            }
         }
 
         return ResponseEntity.ok(LayuiTools.toLayuiTableModel(page));

@@ -6,6 +6,18 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         laydate = layui.laydate,
         table = layui.table;
 
+    laydate.render({
+        elem: '#startDate',
+        fullPanel: true,
+        type: 'datetime'
+    });
+
+    laydate.render({
+        elem: '#endDate',
+        fullPanel: true,
+        type: 'datetime'
+    });
+
 
     //用户列表
     var tableIns = table.render({
@@ -25,7 +37,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     {field: 'prodName', title: '产品名称', minWidth: 100, align: "center"},
                     {field: 'amounts', title: '产品数量', minWidth: 100, align: "center"},
                     {field: 'price', title: '产品价格', minWidth: 100, align: "center"},
-                    {field: 'status', title: '状态 0 未发货 1 已发货 2 已收货', minWidth: 100, align: "center" , templet: function (d) {
+                    {field: 'status', title: '状态', minWidth: 100, align: "center" , templet: function (d) {
                             if (d.status == '0') {
                                 return "<button class=\"layui-btn layui-btn-warm layui-btn-xs\">未发货</button>";
                             } else if (d.status == '1') {
@@ -73,12 +85,15 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
         reload: function () {
             //获取搜索条件值
             var parameterName = $("#searchForm").find("input[name='parameterName']").val().trim();
-            var loginDate = $("#searchForm").find("select[name='loginDate']").val();
+            var startDate = $("#searchForm").find("input[name='startDate']").val();
+            var endDate = $("#searchForm").find("input[name='endDate']").val();
+
             //表格重载
             tableIns.reload({
                 where: { //设定异步数据接口的额外参数，任意设
                     parameterName: parameterName,
-                    loginDate: loginDate
+                    startDate: startDate,
+                    endDate: endDate
                 }
             });
         }
