@@ -10,6 +10,7 @@ import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
 import cn.wolfcode.web.modules.log.LogModules;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 import cn.wolfcode.web.modules.sys.form.LoginForm;
+import cn.wolfcode.web.modules.sys.service.SysUserService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -47,6 +48,9 @@ public class TbOrderInfoController extends BaseController {
     @Autowired
     private ITbCustomerService customerService;
 
+    @Autowired
+    private SysUserService sysUserService;
+
     private static final String LogModule = "TbOrderInfo";
 
     @GetMapping("/list.html")
@@ -81,8 +85,14 @@ public class TbOrderInfoController extends BaseController {
     @PreAuthorize("hasAuthority('order:orderInfo:list')")
     public ResponseEntity page(LayuiPage layuiPage) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
-        IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
 
+        IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
+        List<TbOrderInfo> records = page.getRecords();
+        for (TbOrderInfo record : records) {
+
+            SysUser inputUser = sysUserService.getById(record.getInputUser());
+            record.setInputUserName(inputUser.getUsername());
+        }
         return ResponseEntity.ok(LayuiTools.toLayuiTableModel(entityService.page(page)));
     }
 

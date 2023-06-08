@@ -106,7 +106,16 @@ public class TbOrderInfo implements Serializable {
      * 录入人
      */
     private String inputUser;
+    @TableField(exist = false)
+    private String inputUserName;
 
+    public String getInputUserName() {
+        return inputUserName;
+    }
+
+    public void setInputUserName(String inputUserName) {
+        this.inputUserName = inputUserName;
+    }
     /**
      * 录入时间
      */

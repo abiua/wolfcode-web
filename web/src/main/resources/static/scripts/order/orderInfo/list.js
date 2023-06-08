@@ -33,7 +33,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     {field: 'logisticsCode', title: '物流单号', minWidth: 100, align: "center"},
                     {field: 'deliverTime', title: '发货时间', minWidth: 100, align: "center"},
                     {field: 'receiveTime', title: '收货时间', minWidth: 100, align: "center"},
-                    {field: 'inputUser', title: '录入人', minWidth: 100, align: "center"},
+                    {field: 'inputUserName', title: '录入人', minWidth: 100, align: "center"},
                     {field: 'inputTime', title: '录入时间', minWidth: 100, align: "center"},
 
             {title: '操作', width: 160, templet: '#List-editBar', fixed: "right", align: "center"}
