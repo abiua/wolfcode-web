@@ -7,6 +7,7 @@ import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
 import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
 import cn.wolfcode.web.modules.log.LogModules;
+import cn.wolfcode.web.modules.sys.form.LoginForm;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
@@ -26,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -83,6 +85,10 @@ public class TbOrderInfoController extends BaseController {
     @SysLog(value = LogModules.SAVE, module =LogModule)
     @PreAuthorize("hasAuthority('order:orderInfo:add')")
     public ResponseEntity<ApiModel> save(@Validated({AddGroup.class}) @RequestBody TbOrderInfo entity) {
+
+        entity.setInputTime(LocalDateTime.now());
+        entity.setInputUser(LoginForm.LOGIN_USER_KEY);
+
         entityService.save(entity);
         return ResponseEntity.ok(ApiModel.ok());
     }

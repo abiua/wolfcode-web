@@ -88,6 +88,32 @@ public class TbOrderInfo implements Serializable {
      */
     private LocalDateTime receiveTime;
 
+    /**
+     * 录入人
+     */
+    private String inputUser;
+
+    /**
+     * 录入时间
+     */
+    private LocalDateTime inputTime;
+
+    public String getInputUser() {
+        return inputUser;
+    }
+
+    public void setInputUser(String inputUser) {
+        this.inputUser = inputUser;
+    }
+
+    public LocalDateTime getInputTime() {
+        return inputTime;
+    }
+
+    public void setInputTime(LocalDateTime inputTime) {
+        this.inputTime = inputTime;
+    }
+
     public String getId() {
         return id;
     }
