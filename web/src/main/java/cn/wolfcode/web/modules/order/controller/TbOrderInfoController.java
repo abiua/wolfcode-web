@@ -22,6 +22,7 @@ import link.ahsj.core.annotations.SameUrlData;
 import link.ahsj.core.annotations.SysLog;
 import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -53,6 +54,8 @@ public class TbOrderInfoController extends BaseController {
 
     private static final String LogModule = "TbOrderInfo";
 
+
+
     @GetMapping("/list.html")
     public String list() {
         return "order/orderInfo/list";
@@ -83,17 +86,27 @@ public class TbOrderInfoController extends BaseController {
 
     @RequestMapping("list")
     @PreAuthorize("hasAuthority('order:orderInfo:list')")
-    public ResponseEntity page(LayuiPage layuiPage) {
+    public ResponseEntity page(LayuiPage layuiPage, String parameterName) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
 
-        IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
+        
+        TbCustomer tbCustomers = customerService.lambdaQuery()
+                .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
+                .list().get(0);
+        page = entityService.lambdaQuery()
+                .like(StringUtils.isNotEmpty(parameterName), TbOrderInfo::getCustId, tbCustomers.getId())
+                .page(page);
+
         List<TbOrderInfo> records = page.getRecords();
         for (TbOrderInfo record : records) {
+            TbCustomer customer = customerService.getById(record.getCustId());
+            record.setCustIdName(customer.getCustomerName());
 
             SysUser inputUser = sysUserService.getById(record.getInputUser());
             record.setInputUserName(inputUser.getUsername());
         }
-        return ResponseEntity.ok(LayuiTools.toLayuiTableModel(entityService.page(page)));
+
+        return ResponseEntity.ok(LayuiTools.toLayuiTableModel(page));
     }
 
     @SameUrlData
