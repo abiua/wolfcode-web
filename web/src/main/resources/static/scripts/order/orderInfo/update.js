@@ -38,7 +38,6 @@ layui.use(['form', 'layer'], function () {
                     dataType: "JSON",
                     //成功or错误后
                     success: function (d){
-                        console.log(d)
                         $("#receiverUpdate").empty();
                         var optionHtml = `<option value="">---请选择---</option>`
                         if (d.data.length > 0){
@@ -101,7 +100,6 @@ layui.use(['form', 'layer'], function () {
 
                  //成功or错误后
                  success: function (d){
-                     console.log("success");
                      $("#linkPhoneUpdate").empty();
                      var optionHtml = `<option value="${d.data}">${d.data}</option>`
                      $("#linkPhoneUpdate").html(optionHtml)

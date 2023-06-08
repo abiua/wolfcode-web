@@ -22,16 +22,6 @@
             <div class="layui-row layui-col-space10 layui-form-item">
 
 
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">id</label>
-                    <div class="layui-input-block">
-                        <input type="text"
-                               name="id"
-                               value="${obj.id}"
-                               autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
 
 
                 <div class="layui-col-lg6">
