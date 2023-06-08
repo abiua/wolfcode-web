@@ -5,6 +5,7 @@ import link.ahsj.core.annotations.UpdateGroup;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
@@ -37,13 +38,11 @@ public class TbOrderInfo implements Serializable {
     /**
      * 产品数量
      */
-    @NotBlank(message = "产品数量不能为空",groups = {AddGroup.class, UpdateGroup.class})
     private Integer amounts;
 
     /**
      * 产品价格
      */
-    @NotBlank(message = "产品价格不能为空",groups = {AddGroup.class, UpdateGroup.class})
     private Float price;
 
     /**
@@ -88,6 +87,32 @@ public class TbOrderInfo implements Serializable {
      * 收货时间
      */
     private LocalDateTime receiveTime;
+
+    /**
+     * 录入人
+     */
+    private String inputUser;
+
+    /**
+     * 录入时间
+     */
+    private LocalDateTime inputTime;
+
+    public String getInputUser() {
+        return inputUser;
+    }
+
+    public void setInputUser(String inputUser) {
+        this.inputUser = inputUser;
+    }
+
+    public LocalDateTime getInputTime() {
+        return inputTime;
+    }
+
+    public void setInputTime(LocalDateTime inputTime) {
+        this.inputTime = inputTime;
+    }
 
     public String getId() {
         return id;
