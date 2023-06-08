@@ -16,3 +16,7 @@ datasource:
   druid:
     login-username: admin
     login-password: 123456
+
+# jdbc:mysql://43.138.179.64:3306/nojoke?useSSL=false&serverTimezone=Asia/Shanghai&characterEncoding=utf-8&autoReconnect=true
+  #
+#

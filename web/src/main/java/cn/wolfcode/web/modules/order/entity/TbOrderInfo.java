@@ -74,6 +74,20 @@ public class TbOrderInfo implements Serializable {
 
     private String receiver;
 
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
+    }
+
+    /**
+     * 收货名称
+     */
+    @TableField(exist = false)
+    private String receiverName;
+
     /**
      * 收货人电话
      */

@@ -5,6 +5,7 @@ import cn.wolfcode.web.commons.utils.LayuiTools;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custLinkManInfo.entity.TbCustLinkman;
+import cn.wolfcode.web.modules.custLinkManInfo.service.ITbCustLinkmanService;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
 import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
 import cn.wolfcode.web.modules.log.LogModules;
@@ -33,7 +34,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author wbb
@@ -51,6 +56,9 @@ public class TbOrderInfoController extends BaseController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private ITbCustLinkmanService tbCustLinkmanService;
 
     private static final String LogModule = "TbOrderInfo";
 
@@ -98,12 +106,19 @@ public class TbOrderInfoController extends BaseController {
                 .page(page);
 
         List<TbOrderInfo> records = page.getRecords();
+        List<String> ids = new ArrayList<>();
+        for (TbOrderInfo record : records) {
+            ids.add(record.getReceiver());
+        }
+        Map<String, String> collect = tbCustLinkmanService.batchUserInfo(ids).stream().collect(Collectors.toMap(TbCustLinkman::getId, TbCustLinkman::getLinkman));
         for (TbOrderInfo record : records) {
             TbCustomer customer = customerService.getById(record.getCustId());
             record.setCustIdName(customer.getCustomerName());
 
             SysUser inputUser = sysUserService.getById(record.getInputUser());
             record.setInputUserName(inputUser.getUsername());
+
+            record.setReceiverName(collect.getOrDefault(record.getReceiver(), ""));
         }
 
         return ResponseEntity.ok(LayuiTools.toLayuiTableModel(page));
