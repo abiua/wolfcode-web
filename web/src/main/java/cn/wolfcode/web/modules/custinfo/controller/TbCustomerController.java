@@ -22,6 +22,7 @@ import cn.wolfcode.web.modules.order.service.ITbOrderInfoService;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 import cn.wolfcode.web.modules.sys.form.LoginForm;
 import cn.wolfcode.web.modules.sys.service.SysUserService;
+import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -48,8 +49,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -234,9 +235,19 @@ public class TbCustomerController extends BaseController {
         //構建excel模板字段
         ExcelExportEntityWrapper excelExportEntityWrapper = new ExcelExportEntityWrapper();
         excelExportEntityWrapper.entity(TbCustomer.CUSTOMERNAME_COL,"customerName",40)
-                .entity(TbCustomer.LEGALLEADER_COL,"legalLeader",40);
+                .entity(TbCustomer.LEGALLEADER_COL,"legalLeader",20)
+                .entity(TbCustomer.REGISTERDATE_COL,"registerDate",20)
+                .entity(TbCustomer.OPENSTATUS_COL,"openStatus",20)
+                .entity(TbCustomer.PROVINCENAME_COL,"provinceName",20)
+                .entity(TbCustomer.REGCAPITAL_COL,"regCapital",20)
+                .entity(TbCustomer.INDUSTRY_COL,"industry",20)
+                .entity(TbCustomer.SCOPE_COL,"scope",20)
+                .entity(TbCustomer.REGADDR_COL,"regAddr",20)
+                .entity(TbCustomer.INPUTTIME_COL,"inputTime",20)
+                .entity(TbCustomer.INPUTUSERNAME_COL,"inputUserName",20);
         //組裝workbook
         Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), excelExportEntityWrapper.getResult(), new ArrayList<>());
+
 
         try {
             PoiExportHelper.exportExcel(response,"客户联系人",workbook);
@@ -246,19 +257,39 @@ public class TbCustomerController extends BaseController {
     }
 
     @RequestMapping("import")
-    public ResponseEntity importCust(MultipartFile file) throws Exception {
-        ImportParams importParams = PoiImportHelper.buildImportParams(new String[]{
-                TbCustomer.CUSTOMERNAME_COL,
-                TbCustomer.LEGALLEADER_COL
-        }, new Class[]{
-                ImportGroup.class
-        });
+    public ResponseEntity importCust(MultipartFile file,HttpServletRequest request) throws Exception {
 
-        //解析前端传递文件
-        ExcelImportResult<TbCustomer> importResult = ExcelImportUtil.importExcelMore(file.getInputStream(), TbCustomer.class, importParams);
+        List<TbCustomer> importResult = ExcelUtils.readMultipartFile(file, TbCustomer.class);
+
+//        ImportParams importParams = PoiImportHelper.buildImportParams(new String[]{
+//                TbCustomer.CUSTOMERNAME_COL,
+//                TbCustomer.LEGALLEADER_COL,
+//                TbCustomer.REGISTERDATE_COL,
+//                TbCustomer.OPENSTATUS_COL,
+//                TbCustomer.PROVINCENAME_COL,
+//                TbCustomer.REGCAPITAL_COL,
+//                TbCustomer.INDUSTRY_COL,
+//                TbCustomer.SCOPE_COL,
+//                TbCustomer.REGADDR_COL,
+//                TbCustomer.INPUTTIME_COL,
+//                TbCustomer.INPUTUSERNAME_COL
+//        }, new Class[]{
+//                ImportGroup.class
+//        });
+
+
+
+        for (TbCustomer customer : importResult) {
+            customer.setInputTime(LocalDateTime.now());
+
+            SysUser loginUser = (SysUser)request.getSession().getAttribute(LoginForm.LOGIN_USER_KEY);
+            customer.setInputUserId(loginUser.getUserId());
+
+            customer.setProvince(CityUtils.getCityKey(customer.getProvinceName()));
+        }
 
         //插入到数据库
-        boolean b = entityService.saveBatch(importResult.getList());
+        boolean b = entityService.saveBatch(importResult);
 
         return b ? ResponseEntity.ok(ApiModel.ok()): ResponseEntity.ok(ApiModel.error());
     }

@@ -1,10 +1,14 @@
 package cn.wolfcode.web.commons.utils;
 
 import link.ahsj.core.entitys.KeyValue;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @Author Eastern unbeaten
@@ -12,7 +16,6 @@ import java.util.List;
  * @Date 2022/6/19 9:52 下午
  */
 public class CityUtils {
-
     public static List<KeyValue> citys = new ArrayList<KeyValue>() {{
         add(new KeyValue("100000", "中国"));
         add(new KeyValue("110000", "北京"));
@@ -47,22 +50,26 @@ public class CityUtils {
         add(new KeyValue("640000", "宁夏"));
         add(new KeyValue("650000", "新疆"));
     }};
-
+    public static Map<String,Object> codeAndName;
+    public static Map<Object,String> nameAndCode;
+    static {
+        codeAndName = citys.stream().collect(Collectors.toMap(KeyValue::getKey, KeyValue::getValue));
+        nameAndCode = citys.stream().collect(Collectors.toMap(KeyValue::getValue, KeyValue::getKey));
+    }
     /**
      * 根据地域编码查询省份
      * @param cityKey
      * @return
      */
     public static String getCityValue(String cityKey) {
-        String cytyValue = "未知区域";
-        if (StringUtils.isNotBlank(cityKey)) {
-            for (KeyValue obj : citys) {
-                if (obj.getKey().equals(cityKey)) {
-                    return obj.getValue().toString();
-                }
-            }
-
-        }
-        return cytyValue;
+        return codeAndName.getOrDefault(cityKey, "").toString();
+    }
+    /**
+     * 根据省份查询地域编码
+     * @param cityName
+     * @return
+     */
+    public static String getCityKey(String cityName) {
+        return nameAndCode.getOrDefault(cityName, "");
     }
 }

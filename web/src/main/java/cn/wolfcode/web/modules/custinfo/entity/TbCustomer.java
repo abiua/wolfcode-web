@@ -1,7 +1,9 @@
 package cn.wolfcode.web.modules.custinfo.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.wolfcode.web.commons.utils.ExcelImport;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import link.ahsj.core.annotations.AddGroup;
 import link.ahsj.core.annotations.UpdateGroup;
 import lombok.Builder;
@@ -29,6 +31,17 @@ public class TbCustomer implements Serializable {
 
     public static final String CUSTOMERNAME_COL = "企业名称";
     public static final String LEGALLEADER_COL = "法定代表人";
+    public static final String REGISTERDATE_COL = "成立时间";
+    public static final String OPENSTATUS_COL = "经营状态";
+    public static final String PROVINCENAME_COL = "所属省份";
+    public static final String REGCAPITAL_COL = "注册资本(万元)";
+    public static final String INDUSTRY_COL = "所属行业";
+    public static final String SCOPE_COL = "经营范围";
+    public static final String REGADDR_COL = "注册地址";
+    public static final String INPUTTIME_COL = "录入时间";
+    public static final String INPUTUSERNAME_COL = "录入人";
+
+
 
 
     private String id;
@@ -39,6 +52,7 @@ public class TbCustomer implements Serializable {
     @NotBlank(message = "请填写企业名称", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max=100, message="企业名称不能超过100字！！", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "企业名称")
+    @ExcelImport("企业名称")
     private String customerName;
 
     /**
@@ -46,18 +60,22 @@ public class TbCustomer implements Serializable {
      */
     @Length(max=30, message = "法定代表人名字不能超过30字!!", groups = {AddGroup.class,UpdateGroup.class})
     @Excel(name = "法定代表人")
+    @ExcelImport("法定代表人")
     private String legalLeader;
 
     /**
      * 成立时间
      */
     @Excel(name = "成立时间")
+    @ExcelImport("成立时间")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDate registerDate;
 
     /**
      * 经营状态, 0 开业、1 注销、2 破产
      */
     @Excel(name = "经营状态",replace = {"开业_0","注销_1","破产_2"})
+    @ExcelImport(value = "经营状态", kv = "0-开业;1-注销;2-破产")
     private Integer openStatus;
 
     /**
@@ -65,11 +83,22 @@ public class TbCustomer implements Serializable {
      */
     private String province;
 
+    @TableField(exist = false)
+    @Excel(name = "所属省份")
+    @ExcelImport("所属省份")
+    private String provinceName;
+    public static long getSerialVersionUID(){
+        return serialVersionUID;
+    }
+    public String getProvinceName(){return provinceName; }
+    public void setProvinceName(String value){ this.provinceName = value; }
+
     /**
      * 注册资本,(万元)
      */
     @Length(max = 20,message = "注册资本不能超过20字",groups = {AddGroup.class,UpdateGroup.class})
     @Excel(name = "注册资本(万元)")
+    @ExcelImport("注册资本(万元)")
     private String regCapital;
 
     /**
@@ -77,6 +106,7 @@ public class TbCustomer implements Serializable {
      */
     @Length(max = 30,message = "所属行业不能超过30字",groups = {AddGroup.class,UpdateGroup.class})
     @Excel(name = "所属行业")
+    @ExcelImport("所属行业")
     private String industry;
 
     /**
@@ -84,6 +114,7 @@ public class TbCustomer implements Serializable {
      */
     @Length(max = 500,message = "经营范围不能超过500字",groups = {AddGroup.class,UpdateGroup.class})
     @Excel(name = "经营范围")
+    @ExcelImport("经营范围")
     private String scope;
 
     /**
@@ -91,12 +122,14 @@ public class TbCustomer implements Serializable {
      */
     @Length(max = 500,message = "注册地址不能超过500字",groups = {AddGroup.class,UpdateGroup.class})
     @Excel(name = "注册地址")
+    @ExcelImport("注册地址")
     private String regAddr;
 
     /**
      * 录入时间
      */
     @Excel(name = "录入时间")
+    @ExcelImport("录入时间")
     private LocalDateTime inputTime;
 
     /**
@@ -104,20 +137,14 @@ public class TbCustomer implements Serializable {
      */
     private LocalDateTime updateTime;
 
-    @TableField(exist = false)
-    @Excel(name = "所属省份")
-    private String provinceName;
-    public static long getSerialVersionUID(){
-        return serialVersionUID;
-    }
-    public String getProvinceName(){return provinceName; }
-    public void setProvinceName(String value){ this.provinceName = value; }
+
     /**
      * 录入人
      */
     private String inputUserId;
     @TableField(exist = false)
     @Excel(name = "录入人")
+    @ExcelImport("录入人")
     private String inputUserName;
     public String getInputUserName() {
         return inputUserName;

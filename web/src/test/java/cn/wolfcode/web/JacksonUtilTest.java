@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,5 +69,10 @@ public class JacksonUtilTest {
         Demo demo = jacksonUtil.jsonStrToObj(demoStr, new TypeReference<Demo>() {
         });
         System.out.println(demo);
+    }
+
+    public static void main(String[] args) {
+        LocalDate parse = LocalDate.parse("2020-12-12");
+        System.out.println(parse);
     }
 }
