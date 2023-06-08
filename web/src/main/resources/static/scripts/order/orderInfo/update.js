@@ -26,39 +26,69 @@ layui.use(['form', 'layer'], function () {
         })
         return false;
     });
-    form.on('select(custId-select-filter)',function (data){
-            var value = data.value;
-            $.ajax({
-                url: web.rootPath()+'custLinkManInfo/listByCustomerId?custId='+value,
-                type: 'POST',
-                contentType: 'application/json',
-                dataType: "JSON",
-                //成功or错误后
-                success: function (d){
-                    var selectElement = document.getElementById("receiverUpdate");
-                    var receiver= selectElement.dataset.receiver
-                    console.log("success");
-                    $("#receiverUpdate").empty();
-                    var optionHtml = `<option value="">---请选择---</option>`
-                    if (d.data.length > 0){
-                        d.data.forEach(item=>{
-                        if(item.id == receiver){
-                            optionHtml += `<option value="${item.id}" selected>${item.linkman}</option>`
-                        }
-                        else{
-                            optionHtml += `<option value="${item.id}">${item.linkman}</option>`
-                        }
+    var selectElement = document.getElementById("custUpdateId");
+    var selectElement2 = document.getElementById("receiverUpdate");
+    var receiver= selectElement2.dataset.receiver
+    var value = selectElement.dataset.custid
+    console.log(value,receiver)
+    $.ajax({
+                    url: web.rootPath()+'custLinkManInfo/listByCustomerId?custId='+value,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: "JSON",
+                    //成功or错误后
+                    success: function (d){
+                        console.log(d)
+                        $("#receiverUpdate").empty();
+                        var optionHtml = `<option value="">---请选择---</option>`
+                        if (d.data.length > 0){
+                            d.data.forEach(item=>{
+                            if(item.id == receiver){
+                                optionHtml += `<option value="${item.id}" selected>${item.linkman}</option>`
+                            }
+                            else{
+                                optionHtml += `<option value="${item.id}">${item.linkman}</option>`
+                            }
 
-                        })
+                            })
+                        }
+                        $("#receiverUpdate").html(optionHtml)
+
+                        form.render('select','component-form-element')
+
+
+                    },
+                    error: function (data){
+                        console.log("error")
                     }
-                    $("#receiverUpdate").html(optionHtml)
-
-                    form.render('select','component-form-element')
-
-
-                },error: function (data){
-                    console.log("error")
-                }
-            })
-        });
+                })
+//    form.on('select(custId-select-filterUpdate)',function (data){
+//            var value = data.value;
+//            $.ajax({
+//                url: web.rootPath()+'custLinkManInfo/listByCustomerId?custId='+value,
+//                type: 'POST',
+//                contentType: 'application/json',
+//                dataType: "JSON",
+//                //成功or错误后
+//                success: function (d){
+//                    var selectElement = document.getElementById("receiverUpdate");
+//                    var receiver= selectElement.dataset.receiver
+//                    console.log("success2222"，receiver);
+//                    $("#receiverUpdate").empty();
+//                    var optionHtml = `<option value="">---请选择---</option>`
+//                    if (d.data.length > 0){
+//                        d.data.forEach(item=>{
+//                            optionHtml += `<option value="${item.id}">${item.linkman}</option>`
+//                        })
+//                    }
+//                    $("#receiverUpdate").html(optionHtml)
+//
+//                    form.render('select','component-form-element')
+//
+//
+//                },error: function (data){
+//                    console.log("error")
+//                }
+//            })
+//        });
 });

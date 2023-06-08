@@ -37,7 +37,7 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">企业客户</label>
                     <div class="layui-input-block">
-                        <select name="custId" lay-filter="custId-select-filterUpdate">
+                        <select name="custId" id="custUpdateId" data-custId="${obj.custId}">
                               <#list customerList as list>
                                       <#if obj.custId==list.id>
                                           <option selected value="${list.id}">${list.customerName}</option>
@@ -101,7 +101,7 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">收货人</label>
                     <div class="layui-input-block">
-                        <select lay-filter="linkman-select-filter" data-receiver="${obj.receiver}}" name="receiver" id="receiverUpdate"></select>
+                        <select data-receiver="${obj.receiver}" name="receiver" id="receiverUpdate"></select>
                     </div>
                 </div>
 

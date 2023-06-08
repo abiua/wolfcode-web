@@ -1,5 +1,7 @@
 package cn.wolfcode.web.modules.order.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+import com.baomidou.mybatisplus.annotation.TableField;
 import link.ahsj.core.annotations.AddGroup;
 import link.ahsj.core.annotations.UpdateGroup;
 import org.hibernate.validator.constraints.Length;
@@ -53,8 +55,20 @@ public class TbOrderInfo implements Serializable {
     /**
      * 收货人--通过企业id获得
      */
-    @Length(max = 30,message = "收货人字数不能超过30",groups = {AddGroup.class,UpdateGroup.class})
+
     private String receiver;
+
+    @TableField(exist = false)
+    @Length(max = 30,message = "收货人字数不能超过30",groups = {AddGroup.class,UpdateGroup.class})
+    private String recevierName;
+
+    public String getRecevierName() {
+        return recevierName;
+    }
+
+    public void setRecevierName(String recevierName) {
+        this.recevierName = recevierName;
+    }
 
     /**
      * 收货人电话
