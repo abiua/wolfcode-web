@@ -89,7 +89,7 @@ public class TbOrderInfoController extends BaseController {
     public ResponseEntity page(LayuiPage layuiPage, String parameterName) {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
 
-        
+        IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
         TbCustomer tbCustomers = customerService.lambdaQuery()
                 .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
                 .list().get(0);
