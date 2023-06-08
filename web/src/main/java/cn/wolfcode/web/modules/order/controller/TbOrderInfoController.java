@@ -66,6 +66,8 @@ public class TbOrderInfoController extends BaseController {
     @GetMapping("/{id}.html")
     @PreAuthorize("hasAuthority('order:orderInfo:update')")
     public ModelAndView toUpdate(@PathVariable("id") String id, ModelAndView mv) {
+        List<TbCustomer> customerList = customerService.list();
+        mv.addObject("customerList",customerList);
         mv.setViewName("order/orderInfo/update");
         mv.addObject("obj", entityService.getById(id));
         mv.addObject("id", id);

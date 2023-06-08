@@ -3,11 +3,12 @@ layui.use(['form', 'layer','laydate'], function () {
         layer = layui.layer,
         laydate = layui.laydate,
         $ = layui.jquery;
-
     laydate.render({
-        elem: '#deliverTime',
-    });
-
+            elem: '#deliverTime'
+        });
+    laydate.render({
+            elem: '#receiveTime'
+        });
     form.on('submit(Add-filter)', function (data) {
         $.ajax({
             url: web.rootPath() + "orderInfo/save",
@@ -36,7 +37,7 @@ layui.use(['form', 'layer','laydate'], function () {
     form.on('select(custId-select-filter)',function (data){
         var value = data.value;
         $.ajax({
-            url: web.rootPath()+'custLinkManInfo/listByCustomerId/?custId='+value,
+            url: web.rootPath()+'custLinkManInfo/listByCustomerId?custId='+value,
             type: 'POST',
             contentType: 'application/json',
             dataType: "JSON",
@@ -45,7 +46,7 @@ layui.use(['form', 'layer','laydate'], function () {
             //成功or错误后
             success: function (d){
                 console.log("success");
-                $("#linkman").empty();
+                $("#receiver").empty();
                 $("#linkPhone").empty();
                 var optionHtml = `<option value="">---请选择---</option>`
                 if (d.data.length > 0){
@@ -54,7 +55,7 @@ layui.use(['form', 'layer','laydate'], function () {
                         optionHtml += `<option value="${item.id}">${item.linkman}</option>`
                     })
                 }
-                $("#linkman").html(optionHtml)
+                $("#receiver").html(optionHtml)
 
                 form.render('select','component-form-element')
 
@@ -68,7 +69,7 @@ layui.use(['form', 'layer','laydate'], function () {
     form.on('select(linkman-select-filter)',function (data){
         var value = data.value;
         $.ajax({
-            url: web.rootPath()+'custLinkManInfo/getLinkmanPhone/?id='+value,
+            url: web.rootPath()+'custLinkManInfo/getLinkmanPhone?id='+value,
             type: 'POST',
             contentType: 'application/json',
             dataType: "JSON",
@@ -79,7 +80,6 @@ layui.use(['form', 'layer','laydate'], function () {
                 console.log("success");
                 $("#linkPhone").empty();
                 var optionHtml = `<option value="${d.data}">${d.data}</option>`
-
                 $("#linkPhone").html(optionHtml)
 
                 form.render('select','component-form-element')

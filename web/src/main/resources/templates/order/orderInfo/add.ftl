@@ -69,7 +69,7 @@
                         <label class="layui-form-label">收货人</label>
                     <div class="layui-input-block">
 <#--                        <input type="text"  name="receiver"  placeholder="请输入"  autocomplete="off" class="layui-input">-->
-                        <select lay-filter="linkman-select-filter" name="linkmanId" id="linkman"></select>
+                        <select lay-filter="linkman-select-filter" name="receiver" id="receiver"></select>
                     </div>
                 </div>
                 <div class="layui-col-lg6">
