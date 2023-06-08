@@ -128,7 +128,16 @@ public class TbOrderInfoController extends BaseController {
     @PutMapping("update")
     @PreAuthorize("hasAuthority('order:orderInfo:update')")
     public ResponseEntity<ApiModel> update(@Validated({UpdateGroup.class}) @RequestBody TbOrderInfo entity) {
+
+        //当状态是收货的时候 发货时间修改
+        if(entity.getStatus()==2){
+            entity.setReceiveTime(LocalDateTime.now());
+        }
+        if(entity.getStatus()==1){
+            entity.setDeliverTime(LocalDateTime.now());
+        }
         entityService.updateById(entity);
+
         return ResponseEntity.ok(ApiModel.ok());
     }
 

@@ -37,7 +37,7 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">企业客户</label>
                     <div class="layui-input-block">
-                        <select name="custId" id="custUpdateId" data-custId="${obj.custId}">
+                        <select lay-filter="custId-select-filter-update" name="custId" id="custUpdateId" data-custId="${obj.custId}">
                               <#list customerList as list>
                                       <#if obj.custId==list.id>
                                           <option selected value="${list.id}">${list.customerName}</option>
@@ -89,10 +89,10 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">状态 0 未发货 1 已发货 2 已收货</label>
                     <div class="layui-input-block">
-                        <select name="status">
-                               <option value="0" <#if obj.status == 0>selected</#if>>未发货</option>
-                               <option value="1" <#if obj.status == 1>selected</#if>>已发货</option>
-                               <option value="2" <#if obj.status == 2>selected</#if>>已收货</option>
+                        <select name="status" id="statusUpdate" data-status="${obj.status}">
+                               <option value="0"  <#if obj.status == 0>selected</#if>>未发货</option>
+                               <option value="1"  <#if obj.status == 1>selected</#if>>已发货</option>
+                               <option value="2"  <#if obj.status == 2>selected</#if>>已收货</option>
                         </select>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">收货人</label>
                     <div class="layui-input-block">
-                        <select data-receiver="${obj.receiver}" name="receiver" id="receiverUpdate"></select>
+                        <select lay-filter="receiver-select-filter-update" data-receiver="${obj.receiver}" name="receiver" id="receiverUpdate"></select>
                     </div>
                 </div>
 
@@ -109,11 +109,10 @@
                 <div class="layui-col-lg6">
                         <label class="layui-form-label">收货人电话</label>
                     <div class="layui-input-block">
-                        <input type="text"
-                               name="linkPhone"
-                               value="${obj.linkPhone}"
-                               autocomplete="off"
-                               class="layui-input">
+
+                        <select name="linkPhone" id="linkPhoneUpdate">
+                            <option value="${obj.linkPhone}">${obj.linkPhone}</option>
+                        </select>
                     </div>
                 </div>
 
@@ -193,7 +192,18 @@
 <script src="${request.contextPath}/layui-extend.js"></script>
 <script src="${request.contextPath}/webjars/jquery/jquery.min.js"></script>
 <script>
-
+       var statusUpdate = document.getElementById("statusUpdate")
+       var value = statusUpdate.dataset.status
+       if(value == 0){
+              statusUpdate.options[2].disabled ="true"
+       }
+       if(value ==2 ){
+        statusUpdate.options[0].disabled ="true"
+        statusUpdate.options[1].disabled ="true"
+       }
+       if(value ==1 ){
+               statusUpdate.options[0].disabled ="true"
+       }
 </script>
 <script type="text/javascript" src="${request.contextPath}/scripts/order/orderInfo/update.js?_=${randomNum}"></script>
 </body>
