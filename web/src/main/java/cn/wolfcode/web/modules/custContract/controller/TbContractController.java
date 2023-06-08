@@ -1,9 +1,13 @@
 package cn.wolfcode.web.modules.custContract.controller;
 
+import cn.afterturn.easypoi.excel.ExcelExportUtil;
+import cn.afterturn.easypoi.excel.entity.ExportParams;
 import cn.wolfcode.web.commons.entity.LayuiPage;
 import cn.wolfcode.web.commons.utils.LayuiTools;
+import cn.wolfcode.web.commons.utils.PoiExportHelper;
 import cn.wolfcode.web.commons.utils.SystemCheckUtils;
 import cn.wolfcode.web.modules.BaseController;
+import cn.wolfcode.web.modules.custLinkManInfo.entity.TbCustLinkman;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
 import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
 import cn.wolfcode.web.modules.log.LogModules;
@@ -23,6 +27,7 @@ import link.ahsj.core.annotations.SysLog;
 import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,6 +37,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -144,6 +151,52 @@ public class TbContractController extends BaseController {
     public ResponseEntity<ApiModel> delete(@PathVariable("id") String id) {
         entityService.removeById(id);
         return ResponseEntity.ok(ApiModel.ok());
+    }
+
+
+    @RequestMapping("export")
+    public void export(HttpServletResponse response, String parameterName,
+                       String affixSealStatus,String nullifyStatus,String auditStatus){
+        //1.导出内容
+        List<TbContract> contracts = entityService.lambdaQuery()
+                .and(item-> item.like(StringUtils.isNotEmpty(parameterName), TbContract::getContractCode, parameterName)
+                                .or()
+                                .like(StringUtils.isNotEmpty(parameterName), TbContract::getContractName, parameterName))
+                .and(item-> item.eq(StringUtils.isNotEmpty(affixSealStatus),TbContract::getAffixSealStatus,affixSealStatus)
+                            .eq(StringUtils.isNotEmpty(nullifyStatus),TbContract::getNullifyStatus,nullifyStatus)
+                            .eq(StringUtils.isNotEmpty(auditStatus),TbContract::getAuditStatus,auditStatus)
+                )
+                .list();
+
+        for (TbContract contract : contracts) {
+            contract.setCustIdName(customerService.getById(contract.getCustId()).getCustomerName());
+            contract.setInputName(sysUserService.getById(contract.getInputUser()).getUsername());
+        }
+
+        //2.样式
+        ExportParams params = new ExportParams();
+
+        //3.组装对象
+        /**
+         * 参数一 样式
+         * 参数二 实体类
+         * 参数三 导出内容
+         *
+         * error数组越界：未在实体类中设置导出字段
+         */
+        Workbook excel = ExcelExportUtil.exportExcel(params, TbContract.class, contracts);
+
+        //4.导出
+        try {
+            /**
+             * 参数一 HttpServletResponse
+             * 参数二 导出表名
+             * 参数三 workbook对象
+             */
+            PoiExportHelper.exportExcel(response,"合同表",excel);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
 }
