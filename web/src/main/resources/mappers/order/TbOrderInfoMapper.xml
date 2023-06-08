@@ -4,6 +4,14 @@
 
 
     <select id="queryByTime" resultType="cn.wolfcode.web.modules.order.entity.TbOrderInfo">
-select * from tb_order_info where input_time &gt;= #{start} and input_time &lt;= #{end}
+select * from tb_order_info where true
+                                <if test="start!=null">
+                                and input_time &gt;= #{start}
+                                </if>
+                                <if test="end!=null">
+                                and input_time &lt;= #{end}
+                                </if>
+
+
     </select>
 </mapper>

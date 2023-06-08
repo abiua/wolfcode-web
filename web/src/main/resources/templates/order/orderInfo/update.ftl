@@ -141,28 +141,28 @@
                 </div>
 
 
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">发货时间</label>
-                    <div class="layui-input-block">
-                        <input type="text"
-                               name="deliverTime"
-                               value="${obj.deliverTime}"
-                               autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
+<#--                <div class="layui-col-lg6">-->
+<#--                        <label class="layui-form-label">发货时间</label>-->
+<#--                    <div class="layui-input-block">-->
+<#--                        <input type="text"-->
+<#--                               name="deliverTime"-->
+<#--                               value="${obj.deliverTime}"-->
+<#--                               autocomplete="off"-->
+<#--                               class="layui-input">-->
+<#--                    </div>-->
+<#--                </div>-->
 
 
-                <div class="layui-col-lg6">
-                        <label class="layui-form-label">收货时间</label>
-                    <div class="layui-input-block">
-                        <input type="text"
-                               name="receiveTime"
-                               value="${obj.receiveTime}"
-                               autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
+<#--                <div class="layui-col-lg6">-->
+<#--                        <label class="layui-form-label">收货时间</label>-->
+<#--                    <div class="layui-input-block">-->
+<#--                        <input type="text"-->
+<#--                               name="receiveTime"-->
+<#--                               value="${obj.receiveTime}"-->
+<#--                               autocomplete="off"-->
+<#--                               class="layui-input">-->
+<#--                    </div>-->
+<#--                </div>-->
 
 
                 <div class="layui-form-item">

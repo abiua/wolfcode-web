@@ -125,10 +125,23 @@ public class TbOrderInfoController extends BaseController {
         SystemCheckUtils.getInstance().checkMaxPage(layuiPage);
         IPage page = new Page<>(layuiPage.getPage(), layuiPage.getLimit());
 
+        System.out.println("startDate:"+startDate);
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         List<TbOrderInfo> orderInfoList;
-        if (startDate != null & endDate != null) {
-            orderInfoList = entityService.queryByTime(LocalDateTime.parse(startDate, df), LocalDateTime.parse(endDate, df));
+
+        LocalDateTime startTime=null;
+        LocalDateTime endTime=null;
+
+        if (StringUtils.isNotEmpty(startDate)){
+             startTime = LocalDateTime.parse(startDate, df);
+        }
+
+        if (StringUtils.isNotEmpty(endDate)){
+             endTime = LocalDateTime.parse(endDate, df);
+        }
+
+        if (StringUtils.isNotEmpty(startDate) || StringUtils.isNotEmpty(endDate)) {
+            orderInfoList = entityService.queryByTime(startTime,endTime);
         }
         else {
             orderInfoList = entityService.list();
