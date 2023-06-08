@@ -26,6 +26,7 @@ import link.ahsj.core.annotations.SameUrlData;
 import link.ahsj.core.annotations.SysLog;
 import link.ahsj.core.annotations.UpdateGroup;
 import link.ahsj.core.entitys.ApiModel;
+import link.ahsj.core.exception.AppServerException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -57,6 +59,9 @@ public class TbContractController extends BaseController {
 
     @Autowired
     private ITbCustomerService customerService;
+
+    @Autowired
+    private ITbContractService contractService;
 
     @Autowired
     private SysUserService sysUserService;
@@ -83,6 +88,12 @@ public class TbContractController extends BaseController {
     @GetMapping("/{id}.html")
     @PreAuthorize("hasAuthority('custContract:custContractInfo:update')")
     public ModelAndView toUpdate(@PathVariable("id") String id, ModelAndView mv) {
+        TbContract contract = entityService.getById(id);
+//        if (contract.getAuditStatus()==0) {
+//            mv.setViewName("custContract/custContractInfo/update");
+//            throw new AppServerException("无法修改");
+//        }
+
         List<TbCustomer> customerList = customerService.list();
         mv.addObject("customerList",customerList);
         mv.setViewName("custContract/custContractInfo/update");

@@ -1,5 +1,6 @@
 package cn.wolfcode.web.modules.order.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import cn.afterturn.easypoi.excel.annotation.Excel;
 import com.baomidou.mybatisplus.annotation.TableField;
 import link.ahsj.core.annotations.AddGroup;
@@ -30,6 +31,21 @@ public class TbOrderInfo implements Serializable {
      */
     private String custId;
 
+    @TableField(exist = false)
+    private String custIdName;
+
+    public static long getSerialVersionUID(){
+        return serialVersionUID;
+    }
+
+    public String getCustIdName() {
+        return custIdName;
+    }
+
+    public void setCustIdName(String custIdName) {
+        this.custIdName = custIdName;
+    }
+
     /**
      * 产品名称
      */
@@ -57,18 +73,6 @@ public class TbOrderInfo implements Serializable {
      */
 
     private String receiver;
-
-    @TableField(exist = false)
-    @Length(max = 30,message = "收货人字数不能超过30",groups = {AddGroup.class,UpdateGroup.class})
-    private String recevierName;
-
-    public String getRecevierName() {
-        return recevierName;
-    }
-
-    public void setRecevierName(String recevierName) {
-        this.recevierName = recevierName;
-    }
 
     /**
      * 收货人电话
