@@ -3,6 +3,8 @@ package cn.wolfcode.web.modules.sys.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import cn.wolfcode.web.modules.sys.entity.SysUser;
 
+import java.util.List;
+
 /**
  * @author Eastern unbeaten
  * @version Version 1.0
@@ -19,5 +21,13 @@ public interface SysUserService extends IService<SysUser> {
      * @return
      */
     SysUser queryUserInfo(String id);
+
+    /**
+     * 批量查询用户相关信息
+     *
+     * @param ids
+     * @return
+     */
+    List<SysUser> batchUserInfo(List<String> ids);
 
 }

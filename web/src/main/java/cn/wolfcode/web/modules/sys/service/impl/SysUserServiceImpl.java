@@ -7,6 +7,8 @@ import cn.wolfcode.web.modules.sys.entity.SysUser;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Eastern unbeaten
  * @version Version 1.0
@@ -20,5 +22,10 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public SysUser queryUserInfo(String id) {
         return baseMapper.queryUserInfo(id);
+    }
+
+    @Override
+    public List<SysUser> batchUserInfo(List<String> ids) {
+        return baseMapper.selectBatchIds(ids);
     }
 }

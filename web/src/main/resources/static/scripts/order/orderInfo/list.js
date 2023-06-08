@@ -25,8 +25,17 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                     {field: 'prodName', title: '产品名称', minWidth: 100, align: "center"},
                     {field: 'amounts', title: '产品数量', minWidth: 100, align: "center"},
                     {field: 'price', title: '产品价格', minWidth: 100, align: "center"},
-                    {field: 'status', title: '状态 0 未发货 1 已发货 2 已收货', minWidth: 100, align: "center"},
-                    {field: 'receiver', title: '收货人', minWidth: 100, align: "center"},
+                    {field: 'status', title: '状态 0 未发货 1 已发货 2 已收货', minWidth: 100, align: "center" , templet: function (d) {
+                            if (d.status == '0') {
+                                return "<button class=\"layui-btn layui-btn-warm layui-btn-xs\">未发货</button>";
+                            } else if (d.status == '1') {
+                                return "<button class=\"layui-btn layui-btn-danger layui-btn-xs\">已发货</button>";
+                            } else if(d.status == '2'){
+                                return "<button class=\"layui-btn layui-btn-disabled layui-btn-xs\">已收货</button>";
+                            }
+                        }
+                    },
+                    {field: 'receiverName', title: '收货人', minWidth: 100, align: "center"},
                     {field: 'linkPhone', title: '收货人电话', minWidth: 100, align: "center"},
                     {field: 'address', title: '收货地址', minWidth: 100, align: "center"},
                     {field: 'logistcs', title: '物流', minWidth: 100, align: "center"},
