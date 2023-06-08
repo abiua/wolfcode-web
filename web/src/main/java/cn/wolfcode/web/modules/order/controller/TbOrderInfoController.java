@@ -226,44 +226,46 @@ public class TbOrderInfoController extends BaseController {
      *
      */
     @RequestMapping("export")
-    public void export(HttpServletResponse response, String parameterName,String loginDate){
+    public void export(HttpServletResponse response, String parameterName,String startDate,String endDate){
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime past_7 = LocalDateTime.now().minusDays(7);
-        LocalDateTime past_31 = LocalDateTime.now().minusDays(31);
-        LocalDateTime past_365 = LocalDateTime.now().minusDays(365);
-        List<TbOrderInfo> orderInfoList = new ArrayList<>();
-        if (loginDate != null) {
-            switch (loginDate) {
-                case "0":
-                    orderInfoList = entityService.queryByTime(past_7, now);
-                    break;
-                case "1":
-                    orderInfoList = entityService.queryByTime(past_31, now);
-                    break;
-                case "2":
-                    orderInfoList = entityService.queryByTime(past_365, now);
-                    break;
-            }
-        }else {
+        System.out.println(startDate);
+
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        List<TbOrderInfo> orderInfoList;
+
+        LocalDateTime startTime=null;
+        LocalDateTime endTime=null;
+
+        if (StringUtils.isNotEmpty(startDate) && !"undefined".equals(startDate)){
+            startTime = LocalDateTime.parse(startDate, df);
+        }
+
+        if (StringUtils.isNotEmpty(endDate) && !"undefined".equals(endDate)){
+            endTime = LocalDateTime.parse(endDate, df);
+        }
+
+        if ((StringUtils.isNotEmpty(startDate)&&!"undefined".equals(startDate)) || (StringUtils.isNotEmpty(endDate) && !"undefined".equals(endDate))) {
+            orderInfoList = entityService.queryByTime(startTime,endTime);
+        }
+        else {
             orderInfoList = entityService.list();
         }
-
-        List<String> order_time = new ArrayList<>();
-        for (TbOrderInfo info : orderInfoList) {
-            order_time.add(info.getId());
-        }
-
-        TbCustomer tbCustomers = customerService.lambdaQuery()
-                .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
-                .list().get(0);
+        if (orderInfoList.size()!=0) {
+            List<String> order_time = new ArrayList<>();
+            for (TbOrderInfo info : orderInfoList) {
+                order_time.add(info.getId());
+            }
+            TbCustomer tbCustomers = customerService.lambdaQuery()
+                    .like(StringUtils.isNotEmpty(parameterName), TbCustomer::getCustomerName, parameterName)
+                    .list().get(0);
+            List<TbOrderInfo> orderInfos = entityService.lambdaQuery()
+                    .in(TbOrderInfo::getId, order_time)
+                    .like(StringUtils.isNotEmpty(parameterName), TbOrderInfo::getCustId, tbCustomers.getId()).list();
 
 
 
         //1.导出内容
-        List<TbOrderInfo> orderInfos = entityService.lambdaQuery()
-                .in(TbOrderInfo::getId, order_time)
-                .like(StringUtils.isNotEmpty(parameterName), TbOrderInfo::getCustId, tbCustomers.getId()).list();
+
 
         for (TbOrderInfo orderInfo : orderInfos) {
 
@@ -301,4 +303,4 @@ public class TbOrderInfoController extends BaseController {
         }
     }
 
-}
+}}
