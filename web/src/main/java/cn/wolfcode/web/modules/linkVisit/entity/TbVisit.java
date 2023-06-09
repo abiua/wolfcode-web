@@ -1,6 +1,7 @@
 package cn.wolfcode.web.modules.linkVisit.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.wolfcode.web.commons.utils.ExcelImport;
 import com.baomidou.mybatisplus.annotation.TableField;
 import link.ahsj.core.annotations.AddGroup;
 import link.ahsj.core.annotations.UpdateGroup;
@@ -36,10 +37,13 @@ public class TbVisit implements Serializable {
      * 客户id
      */
     @NotBlank(message = "客户不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "所属企业ID")
+    @ExcelImport("所属企业ID")
     private String custId;
 
     @TableField(exist = false)
     @Excel(name = "所属企业")
+    @ExcelImport("所属企业")
     private String custName;
     public String getCustName(){return custName;}
     public void setCustName(String value){custName=value;}
@@ -48,10 +52,13 @@ public class TbVisit implements Serializable {
      * 联系人id
      */
     @NotBlank(message = "联系人不能为空", groups = {AddGroup.class, UpdateGroup.class})
+    @Excel(name = "联系人ID")
+    @ExcelImport("联系人ID")
     private String linkmanId;
 
     @TableField(exist = false)
     @Excel(name = "联系人")
+    @ExcelImport("联系人")
     private String linkman;
     public String getLinkman(){return linkman;}
     public void setLinkman(String value){linkman=value;}
@@ -59,6 +66,7 @@ public class TbVisit implements Serializable {
      * 拜访方式, 1 上门走访, 2 电话拜访
      */
     @Excel(name = "拜访方式",replace = {"上门走访_1","电话拜访_2"})
+    @ExcelImport(value = "拜访方式",kv = "1-上门走访;2-电话拜访")
     private Integer visitType;
 
     /**
@@ -67,6 +75,7 @@ public class TbVisit implements Serializable {
     @NotBlank(message = "拜访原因不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 100,message = "拜访原因不能超过100字", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "拜访原因")
+    @ExcelImport("拜访原因")
     private String visitReason;
 
     /**
@@ -75,12 +84,14 @@ public class TbVisit implements Serializable {
     @NotBlank(message = "交流内容不能为空", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 1000,message = "交流内容不能超过1000字", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "交流内容")
+    @ExcelImport("交流内容")
     private String content;
 
     /**
      * 拜访时间
      */
     @Excel(name = "拜访时间")
+    @ExcelImport("拜访时间")
     private LocalDate visitDate;
 
 

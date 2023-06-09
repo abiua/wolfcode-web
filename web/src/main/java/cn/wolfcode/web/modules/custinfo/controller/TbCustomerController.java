@@ -248,7 +248,6 @@ public class TbCustomerController extends BaseController {
         //組裝workbook
         Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), excelExportEntityWrapper.getResult(), new ArrayList<>());
 
-
         try {
             PoiExportHelper.exportExcel(response,"客户联系人",workbook);
         } catch (UnsupportedEncodingException e) {
@@ -260,24 +259,6 @@ public class TbCustomerController extends BaseController {
     public ResponseEntity importCust(MultipartFile file,HttpServletRequest request) throws Exception {
 
         List<TbCustomer> importResult = ExcelUtils.readMultipartFile(file, TbCustomer.class);
-
-//        ImportParams importParams = PoiImportHelper.buildImportParams(new String[]{
-//                TbCustomer.CUSTOMERNAME_COL,
-//                TbCustomer.LEGALLEADER_COL,
-//                TbCustomer.REGISTERDATE_COL,
-//                TbCustomer.OPENSTATUS_COL,
-//                TbCustomer.PROVINCENAME_COL,
-//                TbCustomer.REGCAPITAL_COL,
-//                TbCustomer.INDUSTRY_COL,
-//                TbCustomer.SCOPE_COL,
-//                TbCustomer.REGADDR_COL,
-//                TbCustomer.INPUTTIME_COL,
-//                TbCustomer.INPUTUSERNAME_COL
-//        }, new Class[]{
-//                ImportGroup.class
-//        });
-
-
 
         for (TbCustomer customer : importResult) {
             customer.setInputTime(LocalDateTime.now());
@@ -339,4 +320,6 @@ public class TbCustomerController extends BaseController {
             e.printStackTrace();
         }
     }
+
+
 }

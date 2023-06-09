@@ -56,6 +56,9 @@
                                         lay-event="add"><i class="layui-icon">&#xe654;</i>新增
                                 </button>
                             </@sec.authenticate>
+                            <button class="layui-btn layui-btn-sm layui-btn-primary" lay-event="import"><i
+                                        class="layui-icon">&#xe67c;</i>导入
+                            </button>
                             <button class="layui-btn layui-btn-sm layui-btn-primary" lay-tips="导出" lay-event="export">
                                 <i class="layui-icon layui-icon-export"></i>导出
                             </button>

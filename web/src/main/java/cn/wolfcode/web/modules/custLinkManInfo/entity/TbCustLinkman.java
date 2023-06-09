@@ -1,6 +1,7 @@
 package cn.wolfcode.web.modules.custLinkManInfo.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.wolfcode.web.commons.utils.ExcelImport;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.google.common.primitives.UnsignedInteger;
 import link.ahsj.core.annotations.AddGroup;
@@ -28,12 +29,15 @@ import java.io.Serializable;
 @ToString
 public class TbCustLinkman implements Serializable {
 
+
+
     private static final long serialVersionUID = 1L;
 
     private String id;
 
     @TableField(exist = false)
-    @Excel(name = "所属企业")
+    @Excel(name = "企业名称")
+    @ExcelImport("企业名称")
     private String custName;
     public String getCustName() {
         return custName;
@@ -50,6 +54,8 @@ public class TbCustLinkman implements Serializable {
     /**
      * 客户id
      */
+    @Excel(name = "企业ID")
+    @ExcelImport("企业ID")
     private String custId;
 
     /**
@@ -58,12 +64,14 @@ public class TbCustLinkman implements Serializable {
     @NotBlank(message = "联系人名字未填写", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max=30, message = "联系人名字不能超过30字", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "联系人的名字")
+    @ExcelImport("联系人的名字")
     private String linkman;
 
     /**
      * 性别 1 男 0 女
      */
     @Excel(name = "性别",replace = {"男_1","女_0"})
+    @ExcelImport(value = "性别", kv = "1-男;0-女")
     private Integer sex;
 
     /**
@@ -71,6 +79,7 @@ public class TbCustLinkman implements Serializable {
      */
     @LessThan("100")
     @Excel(name = "年龄")
+    @ExcelImport("年龄")
     private Integer age;
 
     /**
@@ -80,6 +89,7 @@ public class TbCustLinkman implements Serializable {
     @NotBlank(message = "手机号未填写", groups = {AddGroup.class, UpdateGroup.class})
     @Length(max = 20, message = "手机号不能超过20位", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "电话")
+    @ExcelImport("电话")
     private String phone;
 
     /**
@@ -87,6 +97,7 @@ public class TbCustLinkman implements Serializable {
      */
     @Length(max = 20, message = "职位不能超过20位", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "职位")
+    @ExcelImport("职位")
     private String position;
 
     /**
@@ -94,12 +105,14 @@ public class TbCustLinkman implements Serializable {
      */
     @Length(max = 20, message = "部门不能超过20位", groups = {AddGroup.class, UpdateGroup.class})
     @Excel(name = "部门")
+    @ExcelImport("部门")
     private String department;
 
     /**
      * 备注信息?
      */
     @Excel(name = "备注信息")
+    @ExcelImport("备注信息")
     private String remark;
 
     /**
@@ -107,6 +120,7 @@ public class TbCustLinkman implements Serializable {
      */
     private String inputUser;
     @Excel(name = "录入人")
+    @ExcelImport("录入人")
     @TableField(exist = false)
     private String inputUserName;
 
@@ -122,6 +136,7 @@ public class TbCustLinkman implements Serializable {
      * 录入时间
      */
     @Excel(name = "录入时间")
+    @ExcelImport("录入时间")
     private LocalDateTime inputTime;
 
     public String getId() {

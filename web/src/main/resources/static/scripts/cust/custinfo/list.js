@@ -113,7 +113,7 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
                 type: 2,
                 resize: false,
                 area: ['400px', '350px'],
-                title: '导入字典',
+                title: '导入',
                 fixed: false,
                 maxmin: false,
                 content: web.rootPath() + 'custinfo/import.html?_' + new Date().getTime()

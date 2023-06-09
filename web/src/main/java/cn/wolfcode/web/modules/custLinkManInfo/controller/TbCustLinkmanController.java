@@ -2,10 +2,9 @@ package cn.wolfcode.web.modules.custLinkManInfo.controller;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.wolfcode.web.commons.entity.ExcelExportEntityWrapper;
 import cn.wolfcode.web.commons.entity.LayuiPage;
-import cn.wolfcode.web.commons.utils.LayuiTools;
-import cn.wolfcode.web.commons.utils.PoiExportHelper;
-import cn.wolfcode.web.commons.utils.SystemCheckUtils;
+import cn.wolfcode.web.commons.utils.*;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
 import cn.wolfcode.web.modules.custinfo.service.ITbCustomerService;
@@ -39,12 +38,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -158,6 +159,65 @@ public class TbCustLinkmanController extends BaseController {
         entityService.removeById(id);
         return ResponseEntity.ok(ApiModel.ok());
     }
+
+    /**
+     * 导入
+     */
+    @RequestMapping("import.html")
+    public ModelAndView custImport(ModelAndView modelAndView){
+        modelAndView.setViewName("custLinkMan/custLinkManInfo/importCustLink");
+        return modelAndView;
+    }
+
+    @RequestMapping("template")
+    public void template(HttpServletResponse response){
+        //構建excel模板字段
+        ExcelExportEntityWrapper excelExportEntityWrapper = new ExcelExportEntityWrapper();
+        excelExportEntityWrapper.entity("企业名称","custName")
+                .entity("企业ID","custId")
+                .entity("联系人的名字","linkman")
+                .entity("性别","sex")
+                .entity("年龄","age")
+                .entity("电话","phone")
+                .entity("职位","position")
+                .entity("部门","department")
+                .entity("备注信息","remark")
+                .entity("录入人","inputUserName")
+                .entity("录入时间","inputTime");
+
+        //組裝workbook
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), excelExportEntityWrapper.getResult(), new ArrayList<>());
+
+        try {
+            PoiExportHelper.exportExcel(response,"客户联系人",workbook);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("import")
+    public ResponseEntity importCust(MultipartFile file, HttpServletRequest request) throws Exception {
+
+        List<TbCustLinkman> importResult = ExcelUtils.readMultipartFile(file, TbCustLinkman.class);
+
+        for (TbCustLinkman linkman : importResult) {
+            linkman.setInputTime(LocalDateTime.now());
+
+            SysUser loginUser = (SysUser)request.getSession().getAttribute(LoginForm.LOGIN_USER_KEY);
+            linkman.setInputUser(loginUser.getUserId());
+        }
+
+        //插入到数据库
+        boolean b = entityService.saveBatch(importResult);
+
+        return b ? ResponseEntity.ok(ApiModel.ok()): ResponseEntity.ok(ApiModel.error());
+    }
+
+
+
+
+
+
 
     /**
      * 导出

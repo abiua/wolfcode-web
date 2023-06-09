@@ -2,10 +2,9 @@ package cn.wolfcode.web.modules.linkVisit.controller;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.wolfcode.web.commons.entity.ExcelExportEntityWrapper;
 import cn.wolfcode.web.commons.entity.LayuiPage;
-import cn.wolfcode.web.commons.utils.LayuiTools;
-import cn.wolfcode.web.commons.utils.PoiExportHelper;
-import cn.wolfcode.web.commons.utils.SystemCheckUtils;
+import cn.wolfcode.web.commons.utils.*;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custLinkManInfo.entity.TbCustLinkman;
 import cn.wolfcode.web.modules.custLinkManInfo.service.ITbCustLinkmanService;
@@ -34,6 +33,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +41,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -197,6 +198,54 @@ public class TbVisitController extends BaseController {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+    //导入功能
+
+    @RequestMapping("import.html")
+    public ModelAndView custImport(ModelAndView modelAndView){
+        modelAndView.setViewName("linkVisit/linkVisitInfo/importLinkVisit");
+        return modelAndView;
+    }
+
+    @RequestMapping("template")
+    public void template(HttpServletResponse response){
+        //構建excel模板字段
+        ExcelExportEntityWrapper excelExportEntityWrapper = new ExcelExportEntityWrapper();
+        excelExportEntityWrapper.entity("所属企业ID","custId")
+                .entity("所属企业","custName")
+                .entity("联系人ID","linkmanId")
+                .entity("联系人","linkman")
+                .entity("拜访方式","visitType")
+                .entity("拜访原因","visitReason")
+                .entity("交流内容","content")
+                .entity("拜访时间","visitDate");
+        //組裝workbook
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), excelExportEntityWrapper.getResult(), new ArrayList<>());
+
+        try {
+            PoiExportHelper.exportExcel(response,"联系人走访模板",workbook);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("import")
+    public ResponseEntity importCust(MultipartFile file, HttpServletRequest request) throws Exception {
+
+        List<TbVisit> importResult = ExcelUtils.readMultipartFile(file, TbVisit.class);
+        SysUser loginUser = (SysUser)request.getSession().getAttribute(LoginForm.LOGIN_USER_KEY);
+
+        for (TbVisit visit : importResult) {
+            visit.setInputUserName(loginUser.getUsername());
+            visit.setInputUser(loginUser.getUserId());
+            visit.setInputTime(LocalDateTime.now());
+        }
+
+        //插入到数据库
+        boolean b = entityService.saveBatch(importResult);
+
+        return b ? ResponseEntity.ok(ApiModel.ok()): ResponseEntity.ok(ApiModel.error());
     }
 
 }
