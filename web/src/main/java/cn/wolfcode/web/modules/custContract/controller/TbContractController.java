@@ -2,10 +2,9 @@ package cn.wolfcode.web.modules.custContract.controller;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.wolfcode.web.commons.entity.ExcelExportEntityWrapper;
 import cn.wolfcode.web.commons.entity.LayuiPage;
-import cn.wolfcode.web.commons.utils.LayuiTools;
-import cn.wolfcode.web.commons.utils.PoiExportHelper;
-import cn.wolfcode.web.commons.utils.SystemCheckUtils;
+import cn.wolfcode.web.commons.utils.*;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custLinkManInfo.entity.TbCustLinkman;
 import cn.wolfcode.web.modules.custinfo.entity.TbCustomer;
@@ -35,6 +34,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -167,17 +167,21 @@ public class TbContractController extends BaseController {
     @RequestMapping("export")
     public void export(HttpServletResponse response, String parameterName,
                        String affixSealStatus,String nullifyStatus,String auditStatus){
+        List<TbContract> contracts = null;
         //1.导出内容
-        List<TbContract> contracts = entityService.lambdaQuery()
-                .and(item-> item.like(StringUtils.isNotEmpty(parameterName), TbContract::getContractCode, parameterName)
-                                .or()
-                                .like(StringUtils.isNotEmpty(parameterName), TbContract::getContractName, parameterName))
-                .and(item-> item.eq(StringUtils.isNotEmpty(affixSealStatus),TbContract::getAffixSealStatus,affixSealStatus)
+        if (StringUtils.isEmpty(parameterName)&&StringUtils.isEmpty(affixSealStatus)&&StringUtils.isEmpty(affixSealStatus)){
+            contracts = entityService.lambdaQuery().list();
+        }else {
+            contracts = entityService.lambdaQuery()
+                    .and(item-> item.like(StringUtils.isNotEmpty(parameterName), TbContract::getContractCode, parameterName)
+                            .or()
+                            .like(StringUtils.isNotEmpty(parameterName), TbContract::getContractName, parameterName))
+                    .and(item-> item.eq(StringUtils.isNotEmpty(affixSealStatus),TbContract::getAffixSealStatus,affixSealStatus)
                             .eq(StringUtils.isNotEmpty(nullifyStatus),TbContract::getNullifyStatus,nullifyStatus)
                             .eq(StringUtils.isNotEmpty(auditStatus),TbContract::getAuditStatus,auditStatus)
-                )
-                .list();
-
+                    )
+                    .list();
+        }
         for (TbContract contract : contracts) {
             contract.setCustIdName(customerService.getById(contract.getCustId()).getCustomerName());
             contract.setInputName(sysUserService.getById(contract.getInputUser()).getUsername());
@@ -207,6 +211,56 @@ public class TbContractController extends BaseController {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+    }
+
+
+    @RequestMapping("import.html")
+    public ModelAndView custImport(ModelAndView modelAndView){
+        modelAndView.setViewName("custContract/custContractInfo/importCustContract");
+        return modelAndView;
+    }
+
+    @RequestMapping("template")
+    public void template(HttpServletResponse response){
+        //構建excel模板字段
+        ExcelExportEntityWrapper excelExportEntityWrapper = new ExcelExportEntityWrapper();
+        excelExportEntityWrapper.entity("所属企业ID","custId")
+                .entity("所属企业","custIdName")
+                .entity("合同名称","contractName")
+                .entity("合同编码","contractCode")
+                .entity("合同金额","amounts")
+                .entity("合同生效开始时间","startDate")
+                .entity("合同生效结束时间","endDate")
+                .entity("合同内容","content")
+                .entity("是否盖章确认","affixSealStatus")
+                .entity("审核状态","auditStatus")
+                .entity("是否作废","nullifyStatus");
+        //組裝workbook
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), excelExportEntityWrapper.getResult(), new ArrayList<>());
+
+        try {
+            PoiExportHelper.exportExcel(response,"客户合同导入模板",workbook);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("import")
+    public ResponseEntity importCust(MultipartFile file, HttpServletRequest request) throws Exception {
+
+        List<TbContract> importResult = ExcelUtils.readMultipartFile(file, TbContract.class);
+        SysUser loginUser = (SysUser)request.getSession().getAttribute(LoginForm.LOGIN_USER_KEY);
+
+        for (TbContract contract : importResult) {
+            contract.setInputUser(loginUser.getUserId());
+            contract.setInputName(loginUser.getUsername());
+            contract.setInputTime(LocalDateTime.now());
+        }
+
+        //插入到数据库
+        boolean b = entityService.saveBatch(importResult);
+
+        return b ? ResponseEntity.ok(ApiModel.ok()): ResponseEntity.ok(ApiModel.error());
     }
 
 }

@@ -1,6 +1,7 @@
 package cn.wolfcode.web.modules.custContract.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
+import cn.wolfcode.web.commons.utils.ExcelImport;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 import java.time.LocalDate;
@@ -24,10 +25,13 @@ public class TbContract implements Serializable {
     /**
      * 合同客户
      */
+    @Excel(name = "所属企业ID")
+    @ExcelImport("所属企业ID")
     private String custId;
 
     @TableField(exist = false)
     @Excel(name = "所属企业")
+    @ExcelImport("所属企业")
     private String custIdName;
 
     public static long getSerialVersionUID(){
@@ -45,58 +49,67 @@ public class TbContract implements Serializable {
      * 合同名称
      */
     @Excel(name = "合同名称")
+    @ExcelImport("合同名称")
     private String contractName;
 
     /**
      * 合同编码
      */
     @Excel(name = "合同编码")
+    @ExcelImport("合同编码")
     private String contractCode;
 
     /**
      * 合同金额
      */
     @Excel(name = "合同金额")
+    @ExcelImport("合同金额")
     private Integer amounts;
 
     /**
      * 合同生效开始时间
      */
     @Excel(name = "合同生效开始时间")
+    @ExcelImport("合同生效开始时间")
     private LocalDate startDate;
 
     /**
      * 合同生效结束时间
      */
     @Excel(name = "合同生效结束时间")
+    @ExcelImport("合同生效结束时间")
     private LocalDate endDate;
 
     /**
      * 合同内容
      */
     @Excel(name = "合同内容")
+    @ExcelImport("合同内容")
     private String content;
 
     /**
      * 是否盖章确认 0 否 1 是
      */
     @Excel(name = "是否盖章确认",replace = {"否_0","是_1"})
+    @ExcelImport(value = "是否盖章确认",kv = "0-否;1-是")
     private Integer affixSealStatus;
 
     /**
      * 审核状态 0 未审核 1 审核通过 -1 审核不通过
      */
     @Excel(name = "审核状态",replace = {"未审核_0","审核通过_1","审核不通过_-1"})
+    @ExcelImport(value = "审核状态",kv = "0-未审核;1-审核通过;-1-审核不通过")
     private Integer auditStatus;
 
     /**
      * 是否作废 1 作废 0 在用
      */
     @Excel(name = "是否作废",replace = {"作废_1","在用_0"})
+    @ExcelImport(value = "是否作废",kv = "1-作废;0-在用")
     private Integer nullifyStatus;
 
     /**
-     * 录入人
+     * 录入人id
      */
     private String inputUser;
 

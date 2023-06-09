@@ -2,10 +2,9 @@ package cn.wolfcode.web.modules.order.controller;
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil;
 import cn.afterturn.easypoi.excel.entity.ExportParams;
+import cn.wolfcode.web.commons.entity.ExcelExportEntityWrapper;
 import cn.wolfcode.web.commons.entity.LayuiPage;
-import cn.wolfcode.web.commons.utils.LayuiTools;
-import cn.wolfcode.web.commons.utils.PoiExportHelper;
-import cn.wolfcode.web.commons.utils.SystemCheckUtils;
+import cn.wolfcode.web.commons.utils.*;
 import cn.wolfcode.web.modules.BaseController;
 import cn.wolfcode.web.modules.custLinkManInfo.entity.TbCustLinkman;
 import cn.wolfcode.web.modules.custLinkManInfo.service.ITbCustLinkmanService;
@@ -36,6 +35,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -303,4 +303,64 @@ public class TbOrderInfoController extends BaseController {
         }
     }
 
-}}
+
+
+
+}
+
+
+    //导入功能
+
+    @RequestMapping("import.html")
+    public ModelAndView custImport(ModelAndView modelAndView){
+        modelAndView.setViewName("order/orderInfo/importOrder");
+        return modelAndView;
+    }
+
+    @RequestMapping("template")
+    public void template(HttpServletResponse response){
+        //構建excel模板字段
+        ExcelExportEntityWrapper excelExportEntityWrapper = new ExcelExportEntityWrapper();
+        excelExportEntityWrapper.entity("所属企业ID","custId")
+                .entity("所属企业","custIdName")
+                .entity("产品名称","prodName")
+                .entity("数量","amounts")
+                .entity("价格","price")
+                .entity("状态","status")
+                .entity("收货人ID","receiver")
+                .entity("收货人","receiverName")
+                .entity("收货人电话","linkPhone")
+                .entity("收货地址","address")
+                .entity("物流","logistcs")
+                .entity("物流单号","logisticsCode")
+                .entity("发货时间","deliverTime")
+                .entity("收货时间","receiveTime");
+        //組裝workbook
+        Workbook workbook = ExcelExportUtil.exportExcel(new ExportParams(), excelExportEntityWrapper.getResult(), new ArrayList<>());
+
+        try {
+            PoiExportHelper.exportExcel(response,"订货单导入模板",workbook);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @RequestMapping("import")
+    public ResponseEntity importCust(MultipartFile file, HttpServletRequest request) throws Exception {
+
+        List<TbOrderInfo> importResult = ExcelUtils.readMultipartFile(file, TbOrderInfo.class);
+        SysUser loginUser = (SysUser)request.getSession().getAttribute(LoginForm.LOGIN_USER_KEY);
+        for (TbOrderInfo orderInfo : importResult) {
+            orderInfo.setInputUserName(loginUser.getUsername());
+            orderInfo.setInputUser(loginUser.getUserId());
+            orderInfo.setInputTime(LocalDateTime.now());
+        }
+
+        //插入到数据库
+        boolean b = entityService.saveBatch(importResult);
+
+        return b ? ResponseEntity.ok(ApiModel.ok()): ResponseEntity.ok(ApiModel.error());
+    }
+
+
+}

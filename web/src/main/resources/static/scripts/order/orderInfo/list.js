@@ -119,6 +119,20 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'laydate'], function () {
             });
         }
         ;
+
+        if (obj.event == 'import') {
+            layer.open({
+                id: "orderImport-frame",
+                type: 2,
+                resize: false,
+                area: ['400px', '350px'],
+                title: '导入',
+                fixed: false,
+                maxmin: false,
+                content: web.rootPath() + 'orderInfo/import.html?_' + new Date().getTime()
+            });
+        };
+
         if(obj.event == 'export'){
             var eix;
             //获取搜索条件值
