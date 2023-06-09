@@ -162,7 +162,9 @@
 
                          <select name="nullifyStatus" <#if obj.nullifyStatus == 1>disabled</#if>>
                               <option value="0" <#if obj.nullifyStatus == 0>selected</#if>>在用</option>
-                              <option value="1" <#if obj.nullifyStatus == 1>selected</#if>>作废</option>
+                              <option value="1"
+                                      <#if obj.affixSealStatus == 1>disabled</#if>
+                                      <#if obj.nullifyStatus == 1>selected</#if>>作废</option>
                           </select>
                     </div>
                 </div>
