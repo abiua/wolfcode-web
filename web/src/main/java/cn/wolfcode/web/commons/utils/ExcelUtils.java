@@ -25,6 +25,7 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
@@ -232,7 +233,9 @@ public class ExcelUtils {
                 field.set(t, Double.valueOf(val));
             } else if ("long".equalsIgnoreCase(fieldClassName)) {
                 field.set(t, Long.valueOf(val));
-            } else if ("BigDecimal".equalsIgnoreCase(fieldClassName)) {
+            } else if ("float".equalsIgnoreCase(fieldClassName)) {
+                field.set(t, Float.valueOf(val));
+            }else if ("BigDecimal".equalsIgnoreCase(fieldClassName)) {
                 field.set(t, new BigDecimal(val));
             } else if ("Date".equalsIgnoreCase(fieldClassName)) {
                 try {
@@ -242,6 +245,9 @@ public class ExcelUtils {
                 }
             }else if ("LocalDate".equalsIgnoreCase(fieldClassName)) {
                 LocalDate parse = LocalDate.parse(val);
+                field.set(t, parse);
+            }else if ("LocalDateTime".equalsIgnoreCase(fieldClassName)) {
+                LocalDateTime parse = LocalDateTime.parse(val);
                 field.set(t, parse);
             }
         } catch (Exception e) {
